@@ -79,7 +79,7 @@ class DsJEditableWidget extends CInputWidget
 
 		$cs=Yii::app()->getClientScript();
 		$cs->registerCoreScript('jquery');
-		$cs->registerScriptFile(Yii::app()->baseUrl.'/js/jquery_jeditable/jquery.jeditable.js');
+		$cs->registerScriptFile(Yii::app()->getAssetManager()->publish(dirname(__FILE__).'/jquery.jeditable.mini.js'));
 		$cs->registerScript('EditableInputElement#'.$id,$js);
   }
 
