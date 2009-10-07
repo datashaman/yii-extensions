@@ -1,4 +1,5 @@
 ###Description
+
 This widget encapsulates the JEditable library in a CInputWidget, so the
 widget can be used in CForm definitions.
 
@@ -15,30 +16,28 @@ The jeditable_id parameter which contains the id defaults to 'attribute' so as n
 I've only tested text and textarea types, but assume the rest should work transparently, since the parameters are passed through pretty much verbatim (except for the parameters above).
 
 ###Requirements
+
 * Yii 1.0 or above
 
 ###Installation
+
 * Extract the release file under `protected/extensions`
 
 ###Usage
+
 See the following code examples:
 
 In a form definition:
-~~~
-[php]
-return array(
-  'name' => array(
-    'type' => 'application.extensions.jeditable.DsJEditableWidget',
-    'jeditable_type' => 'text'
-  )
-);
-~~~
-In a view:
-~~~
-[php]
-<?
-  $this->widget('application.extensions.jeditable.DsJEditableWidget', array(
-    'jeditable_type' => 'text'
-  ))
-?>
 
+    return array(
+      'name' => array(
+        'type' => 'application.extensions.jeditable.DsJEditableWidget',
+        'jeditable_type' => 'text'
+      )
+    );
+
+In a view:
+
+    $this->widget('application.extensions.jeditable.DsJEditableWidget', array(
+      'jeditable_type' => 'text'
+    ))
