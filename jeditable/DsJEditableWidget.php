@@ -15,10 +15,10 @@ class DsJEditableWidget extends CInputWidget
   public $callback = null;
 
   // Name of the submitted parameter which contains edited content.
-  public $submitted_name = 'value';
+  public $editable_name = 'value';
 
   // Name of the submitted parameter which contains id.
-  public $submitted_id = 'attribute';
+  public $editable_id = 'attribute';
 
   // Extra parameters when submitting content.
   // Can be either a hash or function returning a hash.
@@ -94,8 +94,8 @@ class DsJEditableWidget extends CInputWidget
       $this->$property === null or $options[$property]=$this->$property;
     }
 
-    $options['id'] = $this->submitted_id;
-    $options['name'] = $this->submitted_name;
+    $options['id'] = $this->editable_id;
+    $options['name'] = $this->editable_name;
     $options['type'] = $this->editable_type;
 
 		if(is_string($this->callback))
