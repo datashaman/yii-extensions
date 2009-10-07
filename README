@@ -1,0 +1,5 @@
+This repository houses any Yii extensions I've developed.
+
+Currently the following extensions are hosted here:
+
+DsJEditableWidget - encapsulates a JEditable element into a CInputElement, so it can be used in CForm definitions or anywhere in-place editing is required.
