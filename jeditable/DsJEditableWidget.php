@@ -15,17 +15,17 @@ class DsJEditableWidget extends CInputWidget
   public $callback = null;
 
   // Name of the submitted parameter which contains edited content.
-  public $editable_name = 'value';
+  public $jeditable_name = 'value';
 
   // Name of the submitted parameter which contains id.
-  public $editable_id = 'attribute';
+  public $jeditable_id = 'attribute';
 
   // Extra parameters when submitting content.
   // Can be either a hash or function returning a hash.
   public $submitdata = null;
 
   // Input type to use. Default input types are text, textarea or select.
-  public $editable_type = 'text';
+  public $jeditable_type = 'text';
 
   // Number of rows if using textarea.
   public $rows = null;
@@ -94,9 +94,9 @@ class DsJEditableWidget extends CInputWidget
       $this->$property === null or $options[$property]=$this->$property;
     }
 
-    $options['id'] = $this->editable_id;
-    $options['name'] = $this->editable_name;
-    $options['type'] = $this->editable_type;
+    $options['id'] = $this->jeditable_id;
+    $options['name'] = $this->jeditable_name;
+    $options['type'] = $this->jeditable_type;
 
 		if(is_string($this->callback))
 		{
