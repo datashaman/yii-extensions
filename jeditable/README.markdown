@@ -1,11 +1,11 @@
 ###Description
 
-This widget encapsulates the JEditable library in a CInputWidget, so the
-widget can be used in CForm definitions.
+This widget encapsulates the [Jeditable](http://www.appelsiini.net/projects/jeditable) library in a CInputWidget, so the
+widget can be used in CForm definitions and views.
 
-The saveurl parameter expected by JEditable defaults to $_SERVER['REQUEST_URI'] if not provided in the config of the widget.
+The saveurl parameter expected by Jeditable (the first parameter to the editable call) defaults to $_SERVER['REQUEST_URI'] if not provided in the config of the widget.
 
-Three JEditable parameters have changed names to avoid collision with CInputWidget attributes:
+Three Jeditable parameters have changed names to avoid collision with CInputWidget attributes:
 
 * id renamed to jeditable_id
 * name renamed to jeditable_name
@@ -41,3 +41,5 @@ In a view:
     $this->widget('application.extensions.jeditable.DsJEditableWidget', array(
       'jeditable_type' => 'text'
     ))
+
+Further documentation and examples of usage can be found at the [Jeditable home page](http://www.appelsiini.net/projects/jeditable). Remember to use jeditable_id, jeditable_name and jeditable_type wherever it uses id, name or type in the examples.
