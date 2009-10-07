@@ -5,10 +5,10 @@ The saveurl parameter expected by JEditable defaults to $_SERVER['REQUEST_URI'] 
 
 Three JEditable parameters have changed names to avoid collision with CInputWidget attributes:
 
-  id renamed to submitted_id
-  name renamed to submitted_name
+  id renamed to editable_id
+  name renamed to editable_name
   type renamed to editable_type
 
-The submitted_id parameter which contains the id defaults to 'attribute' so as not to collide with the $_GET parameter, which usually decides which record you're editing.
+The editable_id parameter which contains the id defaults to 'attribute' so as not to collide with the $_GET parameter, which usually decides which record you're editing.
 
 I've only tested text and textarea types, but assume the rest should work transparently, since the parameters are passed through pretty much verbatim (except for the parameters above).
