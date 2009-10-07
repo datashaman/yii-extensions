@@ -21,7 +21,7 @@ I've only tested text and textarea types, but assume the rest should work transp
 
 ###Installation
 
-* cd <Yii base>/<project>/protected/extensions
+* cd yii/project/protected/extensions
 * git clone git://github.com/datashaman/yii-extensions.git ds
 
 ###Usage
