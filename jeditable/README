@@ -3,6 +3,12 @@ widget can be used in CForm definitions.
 
 The saveurl parameter expected by JEditable defaults to $_SERVER['REQUEST_URI'] if not provided in the config of the widget.
 
-The submitted parameter which contains the id defaults to 'attribute' so as not to collide with the $_GET parameter, which usually decides which record you're editing.
+Three JEditable parameters have changed names to avoid collision with CInputWidget attributes:
 
-I haven't tested any of the other content types besides text, but assume it should work transparently, since the parameters are passed through pretty much verbatim.
+  id renamed to submitted_id
+  name renamed to submitted_name
+  type renamed to editable_type
+
+The submitted_id parameter which contains the id defaults to 'attribute' so as not to collide with the $_GET parameter, which usually decides which record you're editing.
+
+I've only tested text and textarea types, but assume the rest should work transparently, since the parameters are passed through pretty much verbatim (exceptfor the parameters above).

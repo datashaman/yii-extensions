@@ -2,7 +2,7 @@
 class DsJEditableWidget extends CInputWidget
 {
   // The URL the editable content is saved to
-  public $saveurl;
+  public $saveurl = null;
 
   // Method to use when submitting edited content.
   public $method = 'POST';
@@ -12,7 +12,7 @@ class DsJEditableWidget extends CInputWidget
   // Value contains submitted form content.
   // Settings contain all plugin settings.
   // Inside function this refers to the original element.
-  public $callback;
+  public $callback = null;
 
   // Name of the submitted parameter which contains edited content.
   public $submitted_name = 'value';
@@ -22,16 +22,16 @@ class DsJEditableWidget extends CInputWidget
 
   // Extra parameters when submitting content.
   // Can be either a hash or function returning a hash.
-  public $submitdata;
+  public $submitdata = null;
 
   // Input type to use. Default input types are text, textarea or select.
-  public $type;
+  public $editable_type = 'text';
 
   // Number of rows if using textarea.
-  public $rows;
+  public $rows = null;
 
   // Number of columns if using textarea.
-  public $cols;
+  public $cols = null;
 
   // Height of the input element in pixels.
   // Can also be set to none.
@@ -42,16 +42,16 @@ class DsJEditableWidget extends CInputWidget
   public $width = 'auto';
 
   // Load content of the element from an external URL.
-  public $loadurl;
+  public $loadurl = null;
 
   // Request type to use when using loadurl.
   public $loadtype = 'GET';
 
   // Extra parameters to add to request when using loadurl.
-  public $loaddata;
+  public $loaddata = null;
 
   // Form data passed as parameter. Can be either a string or function returning a string.
-  public $data;
+  public $data = null;
 
   public function run()
   {
@@ -90,12 +90,13 @@ class DsJEditableWidget extends CInputWidget
 	{
 		$options=array();
 
-    foreach(array('method', 'submitdata', 'type', 'rows', 'cols', 'height', 'width', 'loadurl', 'loadtype', 'loaddata', 'data') as $property) {
+    foreach(array('method', 'submitdata', 'rows', 'cols', 'height', 'width', 'loadurl', 'loadtype', 'loaddata', 'data') as $property) {
       $this->$property === null or $options[$property]=$this->$property;
     }
 
-    $this->submitted_id === null or $options['id'] = $this->submitted_id;
-    $this->submitted_name === null or $options['name'] = $this->submitted_name;
+    $options['id'] = $this->submitted_id;
+    $options['name'] = $this->submitted_name;
+    $options['type'] = $this->editable_type;
 
 		if(is_string($this->callback))
 		{
