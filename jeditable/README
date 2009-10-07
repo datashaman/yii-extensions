@@ -11,4 +11,4 @@ Three JEditable parameters have changed names to avoid collision with CInputWidg
 
 The submitted_id parameter which contains the id defaults to 'attribute' so as not to collide with the $_GET parameter, which usually decides which record you're editing.
 
-I've only tested text and textarea types, but assume the rest should work transparently, since the parameters are passed through pretty much verbatim (exceptfor the parameters above).
+I've only tested text and textarea types, but assume the rest should work transparently, since the parameters are passed through pretty much verbatim (except for the parameters above).
