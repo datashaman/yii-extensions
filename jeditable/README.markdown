@@ -17,11 +17,12 @@ I've only tested text and textarea types, but assume the rest should work transp
 
 ###Requirements
 
-* Yii 1.0 or above
+* Yii 1.0 or above (Yii 1.1 for CForm interaction)
 
 ###Installation
 
-* Extract the release file under `protected/extensions`
+* cd <Yii base>/<project>/protected/extensions
+* git clone git://github.com/datashaman/yii-extensions.git ds
 
 ###Usage
 
@@ -31,14 +32,14 @@ In a form definition:
 
     return array(
       'name' => array(
-        'type' => 'application.extensions.jeditable.DsJEditableWidget',
+        'type' => 'application.extensions.ds.jeditable.DsJEditableWidget',
         'jeditable_type' => 'text'
       )
     );
 
 In a view:
 
-    $this->widget('application.extensions.jeditable.DsJEditableWidget', array(
+    $this->widget('application.extensions.ds.jeditable.DsJEditableWidget', array(
       'jeditable_type' => 'text'
     ))
 
