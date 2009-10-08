@@ -9,6 +9,7 @@ div.form .value .error, div.view .value .error { background: #fbe3e4; color: #8a
 div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 div.errorSummary a { color: #8a1f11; }
 
+div.admin h2 { padding-bottom: 6px; }
 div.admin table { background: white; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
 div.admin th, div.admin td { padding: 3px; }
 div.admin th { font-weight: bold; background: #d3dfee; text-align: left; }
