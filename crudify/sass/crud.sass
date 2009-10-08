@@ -15,14 +15,15 @@ div.form, div.view
 
   .attribute, .row
     +columns(16,16)
+    :margin-bottom 3px
 
   .label
     +columns(2.6,16)
     +alpha(16)
-    +pad(0.2,0.2)
+    +pad(0.2,0.2,16)
     font-weight: bold
     text-align: right
-    // background: #B7DDF2
+    //background: #B7DDF2
 
   .value
     +columns(13,16)
@@ -32,6 +33,12 @@ div.form, div.view
       :background = !error_bg_color
       :color = !error_color
       :border-color = !error_border_color
+
+  .buttons
+    +columns(13,16)
+    +full(16)
+    +pad(3,0,16)
+    :margin-top 6px
 
 
 div.errorSummary
