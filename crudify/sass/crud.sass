@@ -4,7 +4,7 @@
 
 div.form, div.view
   +columns(16,16)
-  background: #EBF4FB
+  // background: #EBF4FB
 
   ul
     +no-bullets
@@ -17,8 +17,9 @@ div.form, div.view
     +columns(2.6,16)
     +alpha(16)
     +pad(0.2,0.2)
+    font-weight: bold
     text-align: right
-    background: #B7DDF2
+    // background: #B7DDF2
 
   .value
     +columns(13,16)
@@ -41,17 +42,12 @@ div.admin
     width: 100%
 
   th, td
-    padding: 6px
+    padding: 3px
 
   th
     font-weight: bold
     background: #d3dfee
     text-align: left
-
-    &.label
-      font-weight: bold
-      width: 150px
-      text-align: right
 
   tr.odd
     background: #E6F2FF

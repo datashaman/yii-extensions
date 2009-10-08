@@ -1,8 +1,8 @@
-div.form, div.view { width: 100%; display: inline; float: left; margin-right: 1.266%; background: #EBF4FB; }
+div.form, div.view { width: 100%; display: inline; float: left; margin-right: 1.266%; }
 div.form ul, div.view ul { margin: 0; }
 div.form ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
 div.form .attribute, div.form .row, div.view .attribute, div.view .row { width: 100%; display: inline; float: left; margin-right: 1.266%; }
-div.form .label, div.view .label { width: 15.19%; display: inline; float: left; margin-right: 1.266%; padding-left: 1.235%; padding-right: 1.235%; text-align: right; background: #B7DDF2; }
+div.form .label, div.view .label { width: 15.19%; display: inline; float: left; margin-right: 1.266%; padding-left: 1.235%; padding-right: 1.235%; font-weight: bold; text-align: right; }
 div.form .value, div.view .value { width: 81.013%; display: inline; float: left; margin-right: 1.266%; margin-right: 0; /* ugly hacks for IE6-7 */ #margin-right: -1%; /* end ugly hacks */ }
 div.form .value .error, div.view .value .error { background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 
@@ -10,8 +10,7 @@ div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd;
 div.errorSummary a { color: #8a1f11; }
 
 div.admin table { background: white; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
-div.admin th, div.admin td { padding: 6px; }
+div.admin th, div.admin td { padding: 3px; }
 div.admin th { font-weight: bold; background: #d3dfee; text-align: left; }
-div.admin th.label { font-weight: bold; width: 150px; text-align: right; }
 div.admin tr.odd { background: #E6F2FF; }
 div.admin .actions { width: 75px; text-align: right; }
