@@ -1,0 +1,61 @@
+@import susy/susy
+@import susy/grid
+@import blueprint/modules/interaction
+
+div.form, div.view
+  +columns(16,16)
+  background: #EBF4FB
+
+  ul
+    +no-bullets
+    margin: 0
+
+  .attribute, .row
+    +columns(16,16)
+
+  .label
+    +columns(2.6,16)
+    +alpha(16)
+    +pad(0.2,0.2)
+    text-align: right
+    background: #B7DDF2
+
+  .value
+    +columns(13,16)
+    +omega(16)
+
+    .error
+      :background = !error_bg_color
+      :color = !error_color
+      :border-color = !error_border_color
+
+
+div.errorSummary
+  +error
+
+div.admin
+  table
+    background: white
+    border-collapse: collapse
+    border: 2px #B7DDF2 solid
+    width: 100%
+
+  th, td
+    padding: 6px
+
+  th
+    font-weight: bold
+    background: #d3dfee
+    text-align: left
+
+    &.label
+      font-weight: bold
+      width: 150px
+      text-align: right
+
+  tr.odd
+    background: #E6F2FF
+
+  .actions
+    width: 75px
+    text-align: right
