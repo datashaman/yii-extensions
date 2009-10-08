@@ -100,25 +100,29 @@ class CrudForm extends CForm
               continue;
             }
 
+            $column = $model->metaData->columns[$attribute];
+
             foreach($model->metaData->relations as $property => $relation) {
               if($relation->foreignKey === $attribute && get_class($relation) == 'CBelongsToRelation') {
+                $required = false;
                 $emptyMessage = $this->emptyMessage;
                 foreach($validators as $validator) {
                   if(is_a($validator, 'CRequiredValidator')) {
-                    $emptyMessage = null;
+                    $required = true;
                     break;
                   }
                 }
 
+                $required or $required = !$column->allowNull;
+
                 $foreign = call_user_func(array($relation->className, 'model'));
                 $items = CHtml::listData($foreign->findAll($relation->condition), 'id', 'name');
-                $items = array('' => $this->emptyMessage) + $items;
+                $required or $items = array('' => $this->emptyMessage) + $items;
                 $elements[$attribute] = array('type' => 'dropdownlist', 'items' => $items);
                 continue 2;
               }
             }
 
-            $column = $model->metaData->columns[$attribute];
             if(empty($column)) {
               $elements[$attribute] = $this->defaultText;
             } else if($column->dbType == 'text') {
