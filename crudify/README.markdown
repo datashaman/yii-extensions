@@ -1,4 +1,4 @@
-###Basic Instructions
+##Basic Instructions
 Setup the controller in your config/main.php like so
 
     ...
@@ -40,3 +40,7 @@ If you want to override an automatically generated form, create a CForm config f
 If you want to override the automatically generated view, create a view file in the appropriate place for a controller of the same name as the model. So for example, for a user model, create a file protected/views/user/view.php. If this does not exist, the view is generated from the model.
 
 Note the crudify extension uses the DsDateTimeWidget and expects to be hosted at application.extensions.ds.crudify. 
+
+###Credits
+[Silk icon set 1.3] (http://www.famfamfam.com/lab/icons/silk/)
+Mark James

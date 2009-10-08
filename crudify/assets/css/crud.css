@@ -1,3 +1,5 @@
+#actions { text-align: right; }
+
 div.form, div.view { width: 100%; display: inline; float: left; margin-right: 1.266%; }
 div.form ul, div.view ul { margin: 0; }
 div.form ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
@@ -15,3 +17,4 @@ div.admin th, div.admin td { padding: 3px; }
 div.admin th { font-weight: bold; background: #d3dfee; text-align: left; }
 div.admin tr.odd { background: #E6F2FF; }
 div.admin .actions { width: 75px; text-align: right; }
+div.admin .footer { text-align: right; }
