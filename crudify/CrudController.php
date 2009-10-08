@@ -37,6 +37,7 @@ class CrudController extends CController
       throw new CHttpException(400, "I don't know which model you want to manage. Please specify the 'model' parameter.");
     } else {
       $this->object = new $_REQUEST['model'];
+      $this->object->attachBehavior('crudify', 'application.extensions.ds.crudify.CrudBehavior');
     }
   }
 
