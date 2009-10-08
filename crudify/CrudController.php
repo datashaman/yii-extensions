@@ -18,20 +18,15 @@ class CrudController extends CController
 	protected $object;
 	protected $criteria;
 
-  public $form;
-
   public function init()
   {
     $this->criteria = new CDbCriteria();
-    $css = Yii::app()->getAssetManager()->publish(dirname(__FILE__).'/assets/css/crud.css');
-    Yii::app()->getClientScript()->registerCssFile($css);
 
-    empty($this->form) and $this->form = array(
-      'showErrorSummary' => true,
-      'buttons' => array(
-        'save' => array('type' => 'submit', 'label' => 'Save'),
-      )
-    );
+    $css = Yii::app()->getAssetManager()->publish(dirname(__FILE__).'/assets/css/crud.css');
+
+    $cs = Yii::app()->getClientScript();
+
+    $cs->registerCssFile($css);
 
     if(empty($_REQUEST['model'])) {
       throw new CHttpException(400, "I don't know which model you want to manage. Please specify the 'model' parameter.");
@@ -182,21 +177,5 @@ class CrudController extends CController
   protected function getRelatedLink($controller, $title, $condition) {
     $parameters = um()->createUrl("$controller/list", $condition);
     return CHtml::link($this->getActionLabel('admin', true, $title), $parameters, compact('title'));
-  }
-
-  protected function publishAsset($path)
-  {
-    $asset = join(DIRECTORY_SEPARATOR, array(app()->basePath, $path));
-    return Yii::app()->getAssetManager()->publish($asset);
-  }
-
-  protected function pluralize($string)
-  {
-    $overrides = array(
-      'person' => 'people',
-      'company' => 'companies',
-      'security-company' => 'security-companies',
-    );
-    return ucfirst(empty($overrides[strtolower($string)]) ? CConsoleCommand::pluralize($string) : $overrides[strtolower($string)]);
   }
 }

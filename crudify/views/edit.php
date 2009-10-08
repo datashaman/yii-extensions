@@ -1,6 +1,11 @@
+<?
+$this->pageTitle = ($this->object->isNewRecord ? 'Add' : 'Edit').' '.($this->object->isNewRecord ? get_class($this->object) : $this->object->name);
+?>
 <div class="edit">
   <div class="header">
-    <h2>New <?= get_class($this->object) ?></h2>
+    <h2>
+    <?= $this->pageTitle ?>
+    </h2>
 
     <div id="actions">
       <?= $this->object->getActionLink('admin') ?>

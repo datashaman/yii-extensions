@@ -60,14 +60,23 @@ class CrudForm extends CForm
   public function __construct($config = null, $model, $parent = null)
   {
     if(empty($config)) {
+      $columns = $model->metaData->columns;
+
+      foreach(array_keys($_GET) as $parameter) {
+        if(!empty($columns["{$parameter}_id"])) {
+          array_push($this->readOnlyElements, $parameter.'_id');
+        }
+      }
+     
       $showErrorSummary = true;
       $elements = array();
 
       $attributes = method_exists($model, 'getEditAttributes') ? $model->getEditAttributes() : array_keys($model->attributes);
       foreach($attributes as $attribute) {
         if(in_array($attribute, $this->readOnlyElements)) {
-          if($model->scenario != 'insert')
+          if($model->scenario != 'insert') {
             $elements[$attribute] = $this->getReadOnly($model, $parent, $attribute);
+          }
           continue;
         }
 
@@ -100,7 +109,7 @@ class CrudForm extends CForm
               continue;
             }
 
-            $column = $model->metaData->columns[$attribute];
+            $column = $columns[$attribute];
 
             foreach($model->metaData->relations as $property => $relation) {
               if($relation->foreignKey === $attribute && get_class($relation) == 'CBelongsToRelation') {

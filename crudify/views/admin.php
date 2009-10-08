@@ -1,6 +1,10 @@
+<?php
+require_once 'Inflect.php';
+$this->pageTitle = 'Managing '.Inflect::pluralize(get_class($this->object));
+?>
 <div class="admin">
   <div class="header">
-    <h2>Managing <?= ViewHelper::pluralize(get_class($this->object)) ?></h2>
+    <h2><?= $this->pageTitle ?></h2>
     <div id="actions">
       <?= $this->object->getActionLink('add') ?>
     </div>
