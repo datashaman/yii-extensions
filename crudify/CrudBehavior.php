@@ -55,20 +55,22 @@ class CrudBehavior extends CModelBehavior
   }
 
   protected function getActionLink($action, $labelled = true) {
+    $parameters = array("/crud/$action");
+    foreach($_GET as $name => $value) {
+      $name == 'r' or $parameters[$name] = $value;
+    }
+
     switch($action) {
       case 'delete':
         $name = CHtml::encode($this->owner->name);
         return CHtml::linkButton($this->getActionLabel('delete', $labelled), array(
-          'submit'=> Yii::app()->getUrlManager()->createUrl('/crud/delete', $_GET),
+          'submit'=> Yii::app()->getUrlManager()->createUrl('/crud/delete', $parameters),
           'params'=>array('id'=>$this->owner->id),
           'confirm'=>"Are you sure you want to delete '{$name}'?",
           'title' => 'Delete'
         ));
-      case 'admin':
-        return CHtml::link($this->getActionLabel($action, $labelled), array('admin') + $_GET);
       default:
-        $parameters = array($action) + $_GET;
-        empty($this->owner->id) or $parameters['id'] = $this->owner->id;
+        $action == 'add' or empty($this->owner->id) or $parameters['id'] = $this->owner->id;
         return CHtml::link($this->getActionLabel($action, $labelled), $parameters, array('title' => ucfirst($action)));
     }
   }

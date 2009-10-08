@@ -1,6 +1,9 @@
+<?
+$this->pageTitle = 'View '.$this->object->name;
+?>
 <div class="view">
   <div class="header">
-    <h2>View <?= $this->object->name ?></h2>
+    <h2><?= $this->pageTitle ?></h2>
 
     <div id="actions">
       <?= $this->object->getActionLink('admin') ?>
@@ -22,7 +25,8 @@
           <span class="value"><? $this->object->renderAttributeElement($column->name) ?></span>
         </li>
       <? endforeach ?>
-    </table>
+      </ul>
+    </div>
     <? else:
          $this->renderPartial($view);
        endif

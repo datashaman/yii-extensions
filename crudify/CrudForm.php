@@ -59,6 +59,8 @@ class CrudForm extends CForm
 
   public function __construct($config = null, $model, $parent = null)
   {
+    CHtml::$errorCss = 'validation-error';
+
     if(empty($config)) {
       $columns = $model->metaData->columns;
 

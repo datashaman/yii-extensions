@@ -1,15 +1,91 @@
-#actions { text-align: right; }
+body { line-height: 1.5; font-family: Helvetica Neue, Arial, Helvetica, sans-serif; color: #333333; font-size: 75%; }
+
+h1 { font-weight: normal; color: #222222; font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
+h1 img { margin: 0; }
+
+h2 { font-weight: normal; color: #222222; font-size: 2em; margin-bottom: 0.75em; }
+
+h3 { font-weight: normal; color: #222222; font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
+
+h4 { font-weight: normal; color: #222222; font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+
+h5 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
+
+h6 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; }
+
+h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
+
+p { margin: 0 0 1.5em; }
+p img.left { display: inline; float: left; margin: 1.5em 1.5em 1.5em 0; padding: 0; }
+p img.right { display: inline; float: right; margin: 1.5em 0 1.5em 1.5em; padding: 0; }
+
+a { text-decoration: underline; color: #000099; }
+a:visited { color: #000066; }
+a:focus { color: black; }
+a:hover { color: black; }
+a:active { color: #cc0099; }
+
+blockquote { margin: 1.5em; color: #666; font-style: italic; }
+
+strong { font-weight: bold; }
+
+em { font-style: italic; }
+
+dfn { font-style: italic; font-weight: bold; }
+
+sup, sub { line-height: 0; }
+
+abbr, acronym { border-bottom: 1px dotted #666; }
+
+address { margin: 0 0 1.5em; font-style: italic; }
+
+del { color: #666; }
+
+pre { margin: 1.5em 0; white-space: pre; }
+
+pre, code, tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+
+li ul, li ol { margin: 0 1.5em; }
+
+ul { margin: 0 1.5em 1.5em 1.5em; list-style-type: disc; }
+
+ol { margin: 0 1.5em 1.5em 1.5em; list-style-type: decimal; }
+
+dl { margin: 0 0 1.5em 0; }
+dl dt { font-weight: bold; }
+
+dd { margin-left: 1.5em; }
+
+table { margin-bottom: 1.4em; width: 100%; }
+
+th { font-weight: bold; }
+
+thead th { background: #c3d9ff; }
+
+th, td, caption { padding: 4px 10px 4px 5px; }
+
+tr.even td { background: #e5ecf9; }
+
+tfoot { font-style: italic; }
+
+caption { background: #eee; }
+
+.quiet { color: #666666; }
+
+.loud { color: #111111; }
+
+#actions { text-align: right; background: #B7DDF2; padding: 6px; margin-bottom: 6px; }
 
 div.form, div.view { width: 100%; display: inline; float: left; margin-right: 1.266%; }
 div.form ul, div.view ul { margin: 0; }
 div.form ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
-div.form .attribute, div.form .row, div.view .attribute, div.view .row { width: 100%; display: inline; float: left; margin-right: 1.266%; padding: 3px 0; }
-div.form .label, div.view .label { width: 21.519%; display: inline; float: left; margin-right: 1.266%; font-weight: bold; font-size: 90%; line-height: 1.7; text-align: right; background: #B7DDF2; }
-div.form .label label, div.view .label label { padding: 0 6px; display: block; }
+div.form .attribute, div.form .row, div.view .attribute, div.view .row { width: 100%; display: inline; float: left; margin-right: 1.266%; margin-bottom: 3px; }
+div.form .label, div.view .label { float: left; margin-right: 6px; display: block; width: 180px; font-weight: bold; font-size: 90%; line-height: 1.7; min-height: 1.7; text-align: right; }
+div.form .label label, div.view .label label { padding: 3px; background: #B7DDF2; display: inline-block; }
 div.form .value, div.view .value { width: 74.684%; display: inline; float: left; margin-right: 1.266%; margin-right: 0; /* ugly hacks for IE6-7 */ #margin-right: -1%; /* end ugly hacks */ }
 div.form .buttons, div.view .buttons { width: 68.354%; display: inline; float: left; margin-right: 1.266%; clear: both; padding-left: 22.785%; margin-top: 6px; }
 div.form label.required, div.view label.required { background: yellow; }
-div.form label.error, div.view label.error { background: #fbe3e4; color: #8a1f11; border: 2px solid; border-color: #fbc2c4; }
+div.form label.validation-error, div.view label.validation-error { background: #fbe3e4; color: #8a1f11; }
 
 div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 div.errorSummary a { color: #8a1f11; }

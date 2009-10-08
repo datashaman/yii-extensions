@@ -1,9 +1,15 @@
 @import susy/susy
 @import susy/grid
 @import blueprint/modules/interaction
+@import blueprint/modules/typography
+
++blueprint-typography
 
 #actions
   text-align: right
+  background: #B7DDF2
+  padding: 6px
+  margin-bottom: 6px
 
 div.form, div.view
   +columns(16,16)
@@ -14,25 +20,30 @@ div.form, div.view
 
   .attribute, .row
     +columns(16,16)
-    :padding 3px 0
+    margin-bottom: 3px
 
   .label
-    +columns(3.6,16)
-    +alpha(16)
+    float: left
+    margin-right: 6px
+    display: block
+    width: 180px
     font-weight: bold
     font-size: 90%
     line-height: 1.7
+    min-height: 1.7
     text-align: right
-    background: #B7DDF2
 
     label
-      padding: 0 6px
-      display: block
+      padding: 3px
+      background: #B7DDF2
+      display: inline-block
 
   .value
     +columns(12,16)
     +omega(16)
     //background: #EBF4FB
+
+  .value,.label
 
   .buttons
     +columns(11,16)
@@ -43,12 +54,9 @@ div.form, div.view
   label.required
     +highlight
 
-  label.error
+  label.validation-error
     :background = !error_bg_color
     :color = !error_color
-    :border 2px solid
-    :border-color = !error_border_color
-
 
 div.errorSummary
   +error
