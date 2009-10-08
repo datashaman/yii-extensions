@@ -99,7 +99,7 @@ class CrudForm extends CForm
             foreach($model->metaData->relations as $property => $relation) {
               if($relation->foreignKey === $attribute && get_class($relation) == 'CBelongsToRelation') {
                 $foreign = call_user_func(array($relation->className, 'model'));
-                $items = CHtml::listData($foreign->findAll(), 'id', 'name');
+                $items = CHtml::listData($foreign->findAll($relation->condition), 'id', 'name');
                 $elements[$attribute] = array('type' => 'dropdownlist', 'items' => $items);
                 continue 2;
               }
