@@ -66,6 +66,7 @@ class DsJEditableWidget extends CInputWidget
     if($this->hasModel()) {
       echo CHtml::tag('div', $this->htmlOptions, CHtml::encode($this->model->{$this->attribute}));
     } else {
+      echo CHtml::tag('div', $this->htmlOptions, CHtml::encode($this->value));
     }
   }
 
