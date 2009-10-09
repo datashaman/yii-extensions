@@ -101,6 +101,9 @@ class CrudController extends CController
     $folder = strtolower($_REQUEST['model'][0]).substr($_REQUEST['model'], 1);
     $view_file = $this->getViewPath()."/../$folder/view.php";
     $view = file_exists($view_file) ? "/$folder/view" : null;
+
+    Yii::app()->getClientScript()->registerScript('view', "$('div.view .label').autoWidth();");
+
 		$this->render('view', array('view' => $view));
 	}
 
@@ -129,6 +132,8 @@ class CrudController extends CController
 
       foreach($form->elements as $element)
         $element->layout = '<div class="label">{label}</div> <div class="value">{input}{error}</div>{hint}';
+
+      Yii::app()->getClientScript()->registerScript('edit', "$('div.edit .label').autoWidth(); var width = $('div.edit .label:eq(0)').width(); $('div.edit .buttons').css('margin-left', (width + 6) + 'px');");
 
       $this->render('edit', array('form' => $form));
     }

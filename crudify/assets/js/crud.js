@@ -9,7 +9,8 @@ jQuery.fn.slugify = function(obj) {
 
 jQuery.fn.autoWidth = function(options) {
   var settings = {
-    limitWidth : false
+    limitWidth : false,
+    minWidth : 120
   }
 
   if(options) {
@@ -28,11 +29,9 @@ jQuery.fn.autoWidth = function(options) {
     }
   });
 
+  if(settings.minWidth && maxWidth < settings.minWidth) {
+    maxWidth = settings.minWidth;
+  }
+
   this.width(maxWidth);
 }
-
-jQuery(document).ready(function() {
-  $('div.form .label').autoWidth();
-  var width = $('div.form .label:eq(0)').width();
-  $('div.buttons').css('margin-left', (width + 18) + 'px');
-});

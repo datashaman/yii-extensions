@@ -5,64 +5,87 @@
 +blueprint-typography
 
 #actions
-  text-align: right
+  font-size: medium
+  text-align: left
+  color: #fff
   background: #B7DDF2
   padding: 6px
   margin-bottom: 6px
+  a
+    color: inherit
+    text-decoration: none
+    margin: 0 6px
+  img
+    vertical-align: middle
 
-div.form, div.view
+div.edit, div.view
+  width: 60%
   display: inline-block
   padding: 6px
   background: #E6F2FF
+  border: 2px solid #B7DDF2
 
   ul
     +no-bullets
+    padding: 0
     margin: 0
 
-  .attribute, .row
+  .row
     overflow: auto
 
   .label, .value
     float: left
     display: block
-    margin: 3px 6px
 
   .label
-    font-weight: bold
+    margin: 6px 0
+
+  .label, .value
+    font-size: small
 
   .value
-    input, select, textarea
-      :border 1px solid #B7DDF2
+    margin-top: 3px
+    margin-left: 6px
 
-  label.required, .value .required
+    input, select, textarea
+      margin: 0
+      :font-size inherit
+      :border 2px solid #B7DDF2
+    input[type="text"]
+      :padding 2px 4px
 
   .buttons
     :margin-top 6px
-
-  label.required
 
   .value .validation-error
     :background = !error_bg_color
     :color = !error_color
 
+  input[type='submit']
+    :padding 2px
+    :border 2px solid
+    :background #B7DDF2
+    :color #fff
+    &:hover
+      :border 2px outset
+
+div.view .value
+  margin-top: 6px
+
 div.errorSummary
   +error
 
-div.admin
-  h2
-    :padding-bottom 6px
-
-  table
-    background: white
-    border-collapse: collapse
-    border: 2px #B7DDF2 solid
-    width: 100%
+table.admin
+  background: #B7DDF2
+  border-collapse: collapse
+  border: 2px #B7DDF2 solid
+  width: 100%
 
   th, td
     padding: 3px
 
   th
-    font-weight: bold
+    font-size: larger
     background: #d3dfee
     text-align: left
 
@@ -71,7 +94,4 @@ div.admin
 
   .actions
     width: 75px
-    text-align: right
-
-  .footer
     text-align: right

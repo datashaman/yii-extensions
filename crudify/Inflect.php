@@ -32,6 +32,7 @@ class Inflect
         '/(quiz)$/i'               => "$1zes",
         '/^(ox)$/i'                => "$1en",
         '/([m|l])ouse$/i'          => "$1ice",
+        '/^(complex)$/i'           => "$1es",
         '/(matr|vert|ind)ix|ex$/i' => "$1ices",
         '/(x|ch|ss|sh)$/i'         => "$1es",
         '/([^aeiouy]|qu)y$/i'      => "$1ies",

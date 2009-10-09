@@ -74,25 +74,32 @@ caption { background: #eee; }
 
 .loud { color: #111111; }
 
-#actions { text-align: right; background: #B7DDF2; padding: 6px; margin-bottom: 6px; }
+#actions { font-size: medium; text-align: left; color: #fff; background: #B7DDF2; padding: 6px; margin-bottom: 6px; }
+#actions a { color: inherit; text-decoration: none; margin: 0 6px; }
+#actions img { vertical-align: middle; }
 
-div.form, div.view { display: inline-block; padding: 6px; background: #E6F2FF; }
-div.form ul, div.view ul { margin: 0; }
-div.form ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
-div.form .attribute, div.form .row, div.view .attribute, div.view .row { overflow: auto; }
-div.form .label, div.form .value, div.view .label, div.view .value { float: left; display: block; margin: 3px 6px; }
-div.form .label, div.view .label { font-weight: bold; }
-div.form .value input, div.form .value select, div.form .value textarea, div.view .value input, div.view .value select, div.view .value textarea { border: 1px solid #B7DDF2; }
-div.form .buttons, div.view .buttons { margin-top: 6px; }
-div.form .value .validation-error, div.view .value .validation-error { background: #fbe3e4; color: #8a1f11; }
+div.edit, div.view { width: 60%; display: inline-block; padding: 6px; background: #E6F2FF; border: 2px solid #B7DDF2; }
+div.edit ul, div.view ul { padding: 0; margin: 0; }
+div.edit ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
+div.edit .row, div.view .row { overflow: auto; }
+div.edit .label, div.edit .value, div.view .label, div.view .value { float: left; display: block; }
+div.edit .label, div.view .label { margin: 6px 0; }
+div.edit .label, div.edit .value, div.view .label, div.view .value { font-size: small; }
+div.edit .value, div.view .value { margin-top: 3px; margin-left: 6px; }
+div.edit .value input, div.edit .value select, div.edit .value textarea, div.view .value input, div.view .value select, div.view .value textarea { margin: 0; font-size: inherit; border: 2px solid #B7DDF2; }
+div.edit .value input[type="text"], div.view .value input[type="text"] { padding: 2px 4px; }
+div.edit .buttons, div.view .buttons { margin-top: 6px; }
+div.edit .value .validation-error, div.view .value .validation-error { background: #fbe3e4; color: #8a1f11; }
+div.edit input[type='submit'], div.view input[type='submit'] { padding: 2px; border: 2px solid; background: #B7DDF2; color: #fff; }
+div.edit input[type='submit']:hover, div.view input[type='submit']:hover { border: 2px outset; }
+
+div.view .value { margin-top: 6px; }
 
 div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 div.errorSummary a { color: #8a1f11; }
 
-div.admin h2 { padding-bottom: 6px; }
-div.admin table { background: white; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
-div.admin th, div.admin td { padding: 3px; }
-div.admin th { font-weight: bold; background: #d3dfee; text-align: left; }
-div.admin tr.odd { background: #E6F2FF; }
-div.admin .actions { width: 75px; text-align: right; }
-div.admin .footer { text-align: right; }
+table.admin { background: #B7DDF2; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
+table.admin th, table.admin td { padding: 3px; }
+table.admin th { font-size: larger; background: #d3dfee; text-align: left; }
+table.admin tr.odd { background: #E6F2FF; }
+table.admin .actions { width: 75px; text-align: right; }
