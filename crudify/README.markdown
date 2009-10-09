@@ -44,3 +44,7 @@ Note the crudify extension uses the DsDateTimeWidget and expects to be hosted at
 ###Credits
 [Silk icon set 1.3] (http://www.famfamfam.com/lab/icons/silk/)
 Mark James
+
+[PHP Inflect class] (http://kuwamoto.org/2007/12/17/improved-pluralizing-in-php-actionscript-and-ror/)
+Kuwamoto.org
+

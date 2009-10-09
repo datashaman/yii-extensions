@@ -1,5 +1,4 @@
-@import susy/susy
-@import susy/grid
+@import compass/utilities/lists
 @import blueprint/modules/interaction
 @import blueprint/modules/typography
 
@@ -12,49 +11,37 @@
   margin-bottom: 6px
 
 div.form, div.view
-  +columns(16,16)
+  display: inline-block
+  padding: 6px
+  background: #E6F2FF
 
   ul
     +no-bullets
     margin: 0
 
   .attribute, .row
-    +columns(16,16)
-    margin-bottom: 3px
+    overflow: auto
+
+  .label, .value
+    float: left
+    display: block
+    margin: 3px 6px
 
   .label
-    float: left
-    margin-right: 6px
-    display: block
-    width: 180px
     font-weight: bold
-    font-size: 90%
-    line-height: 1.7
-    min-height: 1.7
-    text-align: right
-
-    label
-      padding: 3px
-      background: #B7DDF2
-      display: inline-block
 
   .value
-    +columns(12,16)
-    +omega(16)
-    //background: #EBF4FB
+    input, select, textarea
+      :border 1px solid #B7DDF2
 
-  .value,.label
+  label.required, .value .required
 
   .buttons
-    +columns(11,16)
-    +full(16)
-    +pad(3.6,0,16)
     :margin-top 6px
 
   label.required
-    +highlight
 
-  label.validation-error
+  .value .validation-error
     :background = !error_bg_color
     :color = !error_color
 

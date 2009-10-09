@@ -1,4 +1,9 @@
 <?
+$cs = Yii::app()->getClientScript();
+$am = Yii::app()->getAssetManager();
+$css = $am->publish(dirname(__FILE__).'/../assets/css/crud.css');
+$cs->registerCssFile($css);
+
 $this->pageTitle = 'View '.$this->object->name;
 ?>
 <div class="view">

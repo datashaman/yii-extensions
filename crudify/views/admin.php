@@ -1,4 +1,9 @@
 <?php
+$cs = Yii::app()->getClientScript();
+$am = Yii::app()->getAssetManager();
+$css = $am->publish(dirname(__FILE__).'/../assets/css/crud.css');
+$cs->registerCssFile($css);
+
 require_once 'Inflect.php';
 $this->pageTitle = 'Managing '.Inflect::pluralize(get_class($this->object));
 ?>

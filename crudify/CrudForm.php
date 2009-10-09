@@ -46,9 +46,11 @@ class CrudForm extends CForm
     }
 
     $parent->beginClip('crud');
+    echo '<div class="row field_'.$attribute.'">';
     echo '<div class="label">'.$model->getAttributeLabel($attribute).'</div>';
     echo '<div class="value">';
     $model->renderAttributeElement($attribute);
+    echo '</div>';
     echo '</div>';
     $parent->endClip();
 

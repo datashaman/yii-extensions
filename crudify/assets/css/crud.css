@@ -76,16 +76,15 @@ caption { background: #eee; }
 
 #actions { text-align: right; background: #B7DDF2; padding: 6px; margin-bottom: 6px; }
 
-div.form, div.view { width: 100%; display: inline; float: left; margin-right: 1.266%; }
+div.form, div.view { display: inline-block; padding: 6px; background: #E6F2FF; }
 div.form ul, div.view ul { margin: 0; }
 div.form ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
-div.form .attribute, div.form .row, div.view .attribute, div.view .row { width: 100%; display: inline; float: left; margin-right: 1.266%; margin-bottom: 3px; }
-div.form .label, div.view .label { float: left; margin-right: 6px; display: block; width: 180px; font-weight: bold; font-size: 90%; line-height: 1.7; min-height: 1.7; text-align: right; }
-div.form .label label, div.view .label label { padding: 3px; background: #B7DDF2; display: inline-block; }
-div.form .value, div.view .value { width: 74.684%; display: inline; float: left; margin-right: 1.266%; margin-right: 0; /* ugly hacks for IE6-7 */ #margin-right: -1%; /* end ugly hacks */ }
-div.form .buttons, div.view .buttons { width: 68.354%; display: inline; float: left; margin-right: 1.266%; clear: both; padding-left: 22.785%; margin-top: 6px; }
-div.form label.required, div.view label.required { background: yellow; }
-div.form label.validation-error, div.view label.validation-error { background: #fbe3e4; color: #8a1f11; }
+div.form .attribute, div.form .row, div.view .attribute, div.view .row { overflow: auto; }
+div.form .label, div.form .value, div.view .label, div.view .value { float: left; display: block; margin: 3px 6px; }
+div.form .label, div.view .label { font-weight: bold; }
+div.form .value input, div.form .value select, div.form .value textarea, div.view .value input, div.view .value select, div.view .value textarea { border: 1px solid #B7DDF2; }
+div.form .buttons, div.view .buttons { margin-top: 6px; }
+div.form .value .validation-error, div.view .value .validation-error { background: #fbe3e4; color: #8a1f11; }
 
 div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 div.errorSummary a { color: #8a1f11; }

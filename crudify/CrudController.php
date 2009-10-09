@@ -22,11 +22,11 @@ class CrudController extends CController
   {
     $this->criteria = new CDbCriteria();
 
-    $css = Yii::app()->getAssetManager()->publish(dirname(__FILE__).'/assets/css/crud.css');
-
     $cs = Yii::app()->getClientScript();
+    $am = Yii::app()->getAssetManager();
 
-    $cs->registerCssFile($css);
+    $js = $am->publish(dirname(__FILE__).'/assets/js/crud.js');
+    $cs->registerScriptFile($js);
 
     if(empty($_REQUEST['model'])) {
       throw new CHttpException(400, "I don't know which model you want to manage. Please specify the 'model' parameter.");

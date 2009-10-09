@@ -57,7 +57,7 @@ class CrudBehavior extends CModelBehavior
   protected function getActionLink($action, $labelled = true) {
     $parameters = array("/crud/$action");
     foreach($_GET as $name => $value) {
-      $name == 'r' or $parameters[$name] = $value;
+      if(!($name == 'r' || $name == 'id' && ($action == 'add' || $action == 'admin'))) $parameters[$name] = $value;
     }
 
     switch($action) {
@@ -70,7 +70,9 @@ class CrudBehavior extends CModelBehavior
           'title' => 'Delete'
         ));
       default:
-        $action == 'add' or empty($this->owner->id) or $parameters['id'] = $this->owner->id;
+        if($action != 'add' && $action != 'admin') {
+          if(!empty($this->owner->id)) $parameters['id'] = $this->owner->id;
+        }
         return CHtml::link($this->getActionLabel($action, $labelled), $parameters, array('title' => ucfirst($action)));
     }
   }
