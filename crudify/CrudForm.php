@@ -1,7 +1,7 @@
 <?php
 class CrudForm extends CForm
 {
-  public $readOnly = true;
+  public $readOnly = false;
 
   public $emptyMessage = 'Select one';
 
