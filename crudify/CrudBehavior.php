@@ -55,17 +55,17 @@ class CrudBehavior extends CModelBehavior
   }
 
   protected function getActionLink($action, $labelled = true) {
-    $parameters = array("/crud/$action");
+    $action == 'delete' or $parameters = array("/crud/$action");
     foreach($_GET as $name => $value) {
-      if(!($name == 'r' || $name == 'id' && ($action == 'add' || $action == 'admin'))) $parameters[$name] = $value;
+      if(!($name == 'r' || $name == 'id' && ($action == 'delete' || $action == 'add' || $action == 'admin'))) $parameters[$name] = $value;
     }
 
     switch($action) {
       case 'delete':
         $name = CHtml::encode($this->owner->name);
         return CHtml::linkButton($this->getActionLabel('delete', $labelled), array(
-          'submit'=> Yii::app()->getUrlManager()->createUrl('/crud/delete', $parameters),
-          'params'=>array('id'=>$this->owner->id),
+          'submit'=> Yii::app()->getUrlManager()->createUrl('crud/delete', $parameters),
+          'params' => array('id' => $this->owner->id),
           'confirm'=>"Are you sure you want to delete '{$name}'?",
           'title' => 'Delete'
         ));
@@ -104,5 +104,12 @@ class CrudBehavior extends CModelBehavior
       }
     }
     return $validators;
+  }
+
+  public function defaultScope()
+  {
+    return array(
+      'deleted_at is null'
+    );
   }
 }

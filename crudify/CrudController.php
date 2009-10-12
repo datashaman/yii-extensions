@@ -17,6 +17,8 @@ class CrudController extends CController
 	 */
 	protected $object;
 	protected $criteria;
+  
+  protected $filterWidgets = array();
 
   public function init()
   {
@@ -41,19 +43,74 @@ class CrudController extends CController
 	 */
 	public function filters()
 	{
-		return array(
+		$filters = array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete',
-			'type',
+			//'ajaxOnly + autoComplete',
 			'identifier + view, edit, delete',
+			'filters',
+      //'addFilters',
 		);
+    return $filters;
 	}
 
-  public function filterType($filterChain)
+  protected function renderFilterWidget($attribute)
   {
-    if(!empty($_REQUEST['type'])) {
-      $type = Type::model()->findBySlug($_REQUEST['type']);
-      $this->criteria->addCondition('type_id = '.$type->id);
+    foreach($this->object->metaData->relations as $property => $relation) {
+      if($relation->foreignKey == $attribute && get_class($relation) == 'CBelongsToRelation') {
+        $foreignClass = $relation->className;
+        break;
+      }
+    }
+
+    if(!empty($foreignClass)) {
+      $class = get_class($this->object);
+
+      $value = '';
+      if(!empty($_GET[$class][$attribute])) {
+        $this->object->$attribute = $_GET[$class][$attribute];
+        $value = $this->object->$property->name;
+      }
+
+      $hiddenId = CHtml::activeId($this->object, $attribute);
+
+      $this->widget('CAutoComplete', array(
+        'id' => 'filter_'.$attribute,
+        'name' => 'q',
+        'url' => $this->createUrl('crud/autoComplete'),
+        'max' => 10,
+        'minChars' => 1,
+        'delay' => 500,
+        'matchCase' => false,
+        'mustMatch' => true,
+        'value' => $value,
+        'extraParams' => array('model' => $_GET['model'], 'relation' => $property),
+        'htmlOptions' => array('class' => 'filter', 'onchange' => 'if(jQuery("#filter_'.$attribute.'").val() == "") jQuery("#'.$hiddenId.'").val("");'),
+        'methodChain' => '.result(function(event,item){ jQuery("#'.$hiddenId.'").val(item[1]); this.form.submit(); })',
+      ));
+      echo CHtml::activeHiddenField($this->object, $attribute);
+
+      if(!empty($_GET[$class][$attribute])) {
+        echo CHtml::imageButton('/images/icons/actions/cross.png', array('alt' => 'Remove filter', 'title' => 'Remove filter', 'onclick' => 'jQuery("#'.$hiddenId.'").val("")'));
+      }
+    }
+  }
+
+  protected function getFilterAttributes()
+  {
+    $filterAttributes = $this->getModelConfig('filterAttributes');
+    is_null($filterAttributes) and $filterAttributes = $this->getModelConfig('adminAttributes');
+    is_null($filterAttributes) and $filterAttributes = array_keys($this->object->attributes);
+    return $filterAttributes;
+  }
+
+  public function filterFilters($filterChain)
+  {
+    foreach($this->getFilterAttributes() as $attribute) {
+      $model = get_class($this->object);
+      if(!empty($_GET[$model][$attribute])) {
+        $this->criteria->addCondition("$attribute = {$_GET[$model][$attribute]}");
+      }
     }
 
     return $filterChain->run();
@@ -83,7 +140,7 @@ class CrudController extends CController
 				'users'=>array('*'),
 			),
 			array('allow',
-				'actions'=>array('add','edit'),
+				'actions'=>array('add','edit','autoComplete'),
 				'users'=>array('@'),
 			),
 			array('allow',
@@ -148,8 +205,9 @@ class CrudController extends CController
 
 	public function actionDelete()
 	{
-    $this->object->delete();
-    $this->redirect(array('admin', 'model' => $_REQUEST['model']));
+    $this->object->deleted_at = date('Y-m-d H:i:s');
+    $this->object->save();
+    $this->redirect(array('admin', $_GET));
 	}
 
 	public function actionAdmin()
@@ -163,12 +221,57 @@ class CrudController extends CController
 
 		$objects = $this->object->model()->findAll($this->criteria);
 
-    $columns = method_exists($this->object, 'getAdminAttributes') ? $this->object->getAdminAttributes() : array_keys($this->object->attributes);
+    $attributes = $this->getModelConfig('adminAttributes');
 
-		$this->render('admin', compact('columns', 'objects', 'pages', 'sort'));
+		$this->render('admin', compact('attributes', 'objects', 'pages', 'sort'));
 	}
 
-	protected function getRelatedLinks() {
+  public function actionAutoComplete()
+  {
+    if(isset($_GET['relation'], $_GET['q'])) {
+      foreach($this->object->metaData->relations as $property => $relation) {
+        if($property == $_GET['relation'] && is_a($relation, 'CBelongsToRelation')) {
+          $criteria = new CDbCriteria();
+          $criteria->addCondition("name like :q");
+          empty($relation->condition) or $criteria->addCondition($relation->condition);
+          $criteria->params = array(':q' => "%{$_GET['q']}%");
+          $criteria->limit = min(empty($_GET['limit']) ? 50 : (int) $_GET['limit'], 50);
+
+          $foreignObject = new $relation->className;
+
+          $result = '';
+          foreach($foreignObject->model()->findAll($criteria) as $object) {
+            $result .= $object->getAttribute('name').'|'.$object->getAttribute('id')."\n";
+          }
+
+          echo $result;
+          break;
+        }
+      }
+    }
+  }
+
+  private function getModelConfig($attribute)
+  {
+    static $configs = array();
+
+    if(!isset($configs[$attribute])) {
+      $config = null;
+
+      if(method_exists($this->object, 'get'.ucfirst($attribute))) {
+        $config = call_user_func(array($this->object, 'get'.ucfirst($attribute)));
+      } else if(property_exists($this->object, $attribute)) {
+        $config = $this->object->$attribute;
+      }
+
+      $configs[$attribute] = $config;
+    }
+
+    return $configs[$attribute];
+  }
+
+	protected function getRelatedLinks()
+  {
     $links = array();
     foreach($this->object->metaData->relations as $name => $relation) {
       if(is_a($relation, 'CHasManyRelation')) {
@@ -179,7 +282,8 @@ class CrudController extends CController
     return $links;
   }
 
-  protected function getRelatedLink($controller, $title, $condition) {
+  protected function getRelatedLink($controller, $title, $condition)
+  {
     $parameters = um()->createUrl("$controller/list", $condition);
     return CHtml::link($this->getActionLabel('admin', true, $title), $parameters, compact('title'));
   }

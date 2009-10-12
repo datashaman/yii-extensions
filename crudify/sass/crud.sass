@@ -1,6 +1,7 @@
 @import compass/utilities/lists
 @import blueprint/modules/interaction
 @import blueprint/modules/typography
+@import blueprint/modules/buttons
 
 +blueprint-typography
 
@@ -9,10 +10,9 @@
   text-align: left
   color: #fff
   background: #B7DDF2
-  padding: 6px
   margin-bottom: 6px
   a
-    color: inherit
+    color: #fff
     text-decoration: none
     margin: 0 6px
   img
@@ -21,7 +21,6 @@
 div.edit, div.view
   width: 60%
   display: inline-block
-  padding: 6px
   background: #E6F2FF
   border: 2px solid #B7DDF2
 
@@ -38,21 +37,11 @@ div.edit, div.view
     display: block
 
   .label
-    margin: 6px 0
 
   .label, .value
-    font-size: small
 
   .value
-    margin-top: 3px
-    margin-left: 6px
-
     input, select, textarea
-      margin: 0
-      :font-size inherit
-      :border 2px solid #B7DDF2
-    input[type="text"]
-      :padding 2px 4px
 
   .buttons
     :margin-top 6px
@@ -62,15 +51,9 @@ div.edit, div.view
     :color = !error_color
 
   input[type='submit']
-    :padding 2px
-    :border 2px solid
-    :background #B7DDF2
-    :color #fff
-    &:hover
-      :border 2px outset
+    +button-button
 
 div.view .value
-  margin-top: 6px
 
 div.errorSummary
   +error
@@ -82,10 +65,8 @@ table.admin
   width: 100%
 
   th, td
-    padding: 3px
 
   th
-    font-size: larger
     background: #d3dfee
     text-align: left
 
@@ -95,3 +76,11 @@ table.admin
   .actions
     width: 75px
     text-align: right
+
+  .filter
+    margin: 0
+    padding: 0
+
+ul.yiiPager
+  font-size: inherit !important
+  float: center
