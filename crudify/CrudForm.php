@@ -60,6 +60,7 @@ class CrudForm extends CForm
       $elements = array();
 
       $attributes = method_exists($model, 'getEditAttributes') ? $model->getEditAttributes() : array_keys($model->attributes);
+      $filterAttributes = $model->filterAttributes;
 
       foreach($attributes as $attribute) {
         if($this->readOnly) {
@@ -144,7 +145,7 @@ class CrudForm extends CForm
         }
       }
       $buttons = array(
-        'save' => array('type' => 'htmlButton'),
+        'save' => array('type' => 'htmlButton', 'label' => $model->getActionLabel('save'), 'buttonType' => 'submit')
       );
 
       $config = compact('showErrorSummary', 'elements', 'buttons');

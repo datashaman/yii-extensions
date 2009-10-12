@@ -55,7 +55,6 @@ class CrudBehavior extends CModelBehavior
   }
 
   protected function getActionLink($action, $labelled = true) {
-    $action == 'delete' or $parameters = array("/crud/$action");
     foreach($_GET as $name => $value) {
       if(!($name == 'r' || $name == 'id' && ($action == 'delete' || $action == 'add' || $action == 'admin'))) $parameters[$name] = $value;
     }
@@ -63,7 +62,7 @@ class CrudBehavior extends CModelBehavior
     switch($action) {
       case 'delete':
         $name = CHtml::encode($this->owner->name);
-        return CHtml::linkButton($this->getActionLabel('delete', $labelled), array(
+        return CHtml::htmlButton($this->getActionLabel('delete', $labelled), array(
           'submit'=> Yii::app()->getUrlManager()->createUrl('crud/delete', $parameters),
           'params' => array('id' => $this->owner->id),
           'confirm'=>"Are you sure you want to delete '{$name}'?",
@@ -73,7 +72,8 @@ class CrudBehavior extends CModelBehavior
         if($action != 'add' && $action != 'admin') {
           if(!empty($this->owner->id)) $parameters['id'] = $this->owner->id;
         }
-        return CHtml::link($this->getActionLabel($action, $labelled), $parameters, array('title' => ucfirst($action)));
+        $url = Yii::app()->getUrlManager()->createUrl("crud/$action", $parameters);
+        return CHtml::htmlButton($this->getActionLabel($action, $labelled), array('title' => ucfirst($action), 'onclick' => 'location.href='.CJavaScript::encode($url)));
     }
   }
 
@@ -104,6 +104,13 @@ class CrudBehavior extends CModelBehavior
       }
     }
     return $validators;
+  }
+
+  public function getFilterAttributes()
+  {
+    $filterAttributes = $this->owner->adminAttributes;
+    is_null($filterAttributes) and $filterAttributes = array_keys($this->attributes);
+    return $filterAttributes;
   }
 
   public function defaultScope()

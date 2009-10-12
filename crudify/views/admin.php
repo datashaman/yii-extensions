@@ -23,8 +23,8 @@ $routeVar = Yii::app()->getUrlManager()->routeVar;
   <?= CHtml::hiddenField('model', $_REQUEST['model']) ?>
   <table class="admin">
     <thead>
-    <tr>
-      <? $filterAttributes = $this->getFilterAttributes();
+    <tr class="filters">
+      <? $filterAttributes = $this->object->filterAttributes;
         foreach($attributes as $attribute): ?>
         <th><?
         if(in_array($attribute, $filterAttributes)) $this->renderFilterWidget($attribute);
@@ -47,9 +47,9 @@ $routeVar = Yii::app()->getUrlManager()->routeVar;
         <td><? $object->renderAttributeElement($attribute) ?></td>
         <? endforeach ?>
         <td class="actions">
-          <? foreach(array('view', 'edit', 'delete') as $action): ?>
-          <?= $object->getActionLink($action, false) ?>
-          <? endforeach ?>
+          <? foreach(array('view', 'edit', 'delete') as $action):
+            echo $object->getActionLink($action, false);
+          endforeach ?>
         </td>
       </tr>
     <? endforeach ?>

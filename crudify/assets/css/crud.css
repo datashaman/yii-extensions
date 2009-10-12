@@ -75,29 +75,30 @@ caption { background: #eee; }
 .loud { color: #111111; }
 
 #actions { font-size: medium; text-align: left; color: #fff; background: #B7DDF2; margin-bottom: 6px; }
-#actions a { color: #fff; text-decoration: none; margin: 0 6px; }
-#actions img { vertical-align: middle; }
+
+button { padding: 0; display: inline-block; }
+button img { vertical-align: middle; }
+
+div.edit .label { margin-top: 0.4em; }
 
 div.edit, div.view { width: 60%; display: inline-block; background: #E6F2FF; border: 2px solid #B7DDF2; }
 div.edit ul, div.view ul { padding: 0; margin: 0; }
 div.edit ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
-div.edit .row, div.view .row { overflow: auto; }
+div.edit .row, div.view .row { overflow: auto; padding: 3px; }
 div.edit .label, div.edit .value, div.view .label, div.view .value { float: left; display: block; }
+div.edit .label, div.view .label { font-weight: bold; margin-right: 6px; }
 div.edit .buttons, div.view .buttons { margin-top: 6px; }
 div.edit .value .validation-error, div.view .value .validation-error { background: #fbe3e4; color: #8a1f11; }
-div.edit input[type='submit'], div.view input[type='submit'] { zoom: 1; display: inline; display: -moz-inline-box; display: inline-block; vertical-align: top; margin: 0.7em 0.5em 0.7em 0; border-width: 1px; border-style: solid; font-family: "Lucida Grande", Tahoma, Arial, Verdana, sans-serif; font-size: 100%; line-height: 130%; text-decoration: none; font-weight: bold; cursor: pointer; width: auto; overflow: visible; padding: 4px 10px 3px 7px; }
-div.edit input[type='submit'] img, div.view input[type='submit'] img { margin: 0 3px -3px 0 !important; padding: 0; border: none; width: 16px; height: 16px; float: none; }
-div.edit input[type='submit'][type], div.view input[type='submit'][type] { padding: 4px 10px 4px 7px; line-height: 17px; }
-*:first-child+html div.edit input[type='submit'][type], *:first-child+html div.view input[type='submit'][type] { padding: 4px 10px 3px 7px; }
 
 
 div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
 div.errorSummary a { color: #8a1f11; }
 
 table.admin { background: #B7DDF2; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
-table.admin th { background: #d3dfee; text-align: left; }
+table.admin th { background: #d3dfee; text-align: left; border-bottom: 1px solid #E6F2FF; }
 table.admin tr.odd { background: #E6F2FF; }
-table.admin .actions { width: 75px; text-align: right; }
+table.admin .actions { width: 100px; text-align: right; }
+table.admin tr.filters th { background: #B7DDF2; }
 table.admin .filter { margin: 0; padding: 0; }
 
 ul.yiiPager { font-size: inherit !important; float: center; }

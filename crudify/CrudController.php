@@ -91,24 +91,17 @@ class CrudController extends CController
       echo CHtml::activeHiddenField($this->object, $attribute);
 
       if(!empty($_GET[$class][$attribute])) {
-        echo CHtml::imageButton('/images/icons/actions/cross.png', array('alt' => 'Remove filter', 'title' => 'Remove filter', 'onclick' => 'jQuery("#'.$hiddenId.'").val("")'));
+        echo CHtml::htmlButton($this->object->getActionLink('cross', false), array('type' => 'submit', 'alt' => 'Remove filter', 'title' => 'Remove filter', 'onclick' => 'jQuery("#'.$hiddenId.'").val("")'));
       }
     }
   }
 
-  protected function getFilterAttributes()
-  {
-    $filterAttributes = $this->getModelConfig('filterAttributes');
-    is_null($filterAttributes) and $filterAttributes = $this->getModelConfig('adminAttributes');
-    is_null($filterAttributes) and $filterAttributes = array_keys($this->object->attributes);
-    return $filterAttributes;
-  }
-
   public function filterFilters($filterChain)
   {
-    foreach($this->getFilterAttributes() as $attribute) {
+    foreach(@$this->object->getFilterAttributes() as $attribute) {
       $model = get_class($this->object);
       if(!empty($_GET[$model][$attribute])) {
+        $this->object->$attribute = $_GET[$model][$attribute];
         $this->criteria->addCondition("$attribute = {$_GET[$model][$attribute]}");
       }
     }
@@ -221,7 +214,8 @@ class CrudController extends CController
 
 		$objects = $this->object->model()->findAll($this->criteria);
 
-    $attributes = $this->getModelConfig('adminAttributes');
+    $attributes = $this->object->adminAttributes;
+    is_null($attributes) and $attributes = array_keys($this->object->attributes);
 
 		$this->render('admin', compact('attributes', 'objects', 'pages', 'sort'));
 	}
@@ -249,25 +243,6 @@ class CrudController extends CController
         }
       }
     }
-  }
-
-  private function getModelConfig($attribute)
-  {
-    static $configs = array();
-
-    if(!isset($configs[$attribute])) {
-      $config = null;
-
-      if(method_exists($this->object, 'get'.ucfirst($attribute))) {
-        $config = call_user_func(array($this->object, 'get'.ucfirst($attribute)));
-      } else if(property_exists($this->object, $attribute)) {
-        $config = $this->object->$attribute;
-      }
-
-      $configs[$attribute] = $config;
-    }
-
-    return $configs[$attribute];
   }
 
 	protected function getRelatedLinks()

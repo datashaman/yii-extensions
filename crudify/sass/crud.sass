@@ -1,9 +1,23 @@
 @import compass/utilities/lists
-@import blueprint/modules/interaction
-@import blueprint/modules/typography
-@import blueprint/modules/buttons
 
-+blueprint-typography
+@import blueprint/modules/colors.sass
+//@import blueprint/modules/buttons.sass
+//@import blueprint/modules/grid.sass
+@import blueprint/modules/typography.sass
+//@import blueprint/modules/utilities.sass
+//@import blueprint/modules/form.sass
+@import blueprint/modules/interaction.sass
+//@import blueprint/modules/debug.sass
+
+=blueprint(!body_selector = "body")
+  +blueprint-typography(!body_selector)
+  //+blueprint-utilities
+  //+blueprint-grid
+  //+blueprint-debug
+  //+blueprint-interaction
+  //+blueprint-form
+
++blueprint
 
 #actions
   font-size: medium
@@ -11,18 +25,24 @@
   color: #fff
   background: #B7DDF2
   margin-bottom: 6px
-  a
-    color: #fff
-    text-decoration: none
-    margin: 0 6px
+
+button
+  padding: 0
+  display: inline-block
   img
     vertical-align: middle
+
+div.edit
+  .label
+    margin-top: 0.4em
 
 div.edit, div.view
   width: 60%
   display: inline-block
   background: #E6F2FF
   border: 2px solid #B7DDF2
+
+  input, select, textarea
 
   ul
     +no-bullets
@@ -31,12 +51,15 @@ div.edit, div.view
 
   .row
     overflow: auto
+    padding: 3px
 
   .label, .value
     float: left
     display: block
 
   .label
+    font-weight: bold
+    margin-right: 6px
 
   .label, .value
 
@@ -49,9 +72,6 @@ div.edit, div.view
   .value .validation-error
     :background = !error_bg_color
     :color = !error_color
-
-  input[type='submit']
-    +button-button
 
 div.view .value
 
@@ -69,13 +89,18 @@ table.admin
   th
     background: #d3dfee
     text-align: left
+    border-bottom: 1px solid #E6F2FF
 
   tr.odd
     background: #E6F2FF
 
   .actions
-    width: 75px
+    width: 100px
     text-align: right
+
+  tr.filters
+    th
+      background: #B7DDF2
 
   .filter
     margin: 0
