@@ -243,7 +243,6 @@ class CrudController extends CController
         $foreignTable = $object->tableName();
 
         $criteria = array(
-          'select' => "{$foreignTable}.id, {$foreignTable}.name",
           'condition' => "{$foreignTable}.name like :q",
           'params' => array('q' => '%'.$_GET['q'].'%'),
           'limit' => min(empty($_GET['limit']) ? 50 : $_GET['limit'], 50),
@@ -259,6 +258,7 @@ class CrudController extends CController
         'select' => "id, $attribute as name",
         'condition' => "$attribute like :q and ($attribute is not null or $attribute = '')",
         'params' => array(":q" => "%$q%"),
+        'order' => "$attribute asc",
       );
       $object = $this->_model;
     }

@@ -193,9 +193,10 @@ class CrudModel extends CActiveRecord
 
   public function options($criteria = array())
   {
+    $tableAlias = strtolower(get_class($this));
     $criteria += array(
-      'select' => 'id, name',
-      'order' => 'name asc',
+      'select' => "$tableAlias.id, $tableAlias.name",
+      'order' => "$tableAlias.name asc",
       );
     $criteria['select'] = 'distinct '.$criteria['select'];
     $this->getDbCriteria()->mergeWith($criteria);
