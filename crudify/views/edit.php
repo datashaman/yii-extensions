@@ -4,19 +4,26 @@ $am = Yii::app()->getAssetManager();
 $css = $am->publish(dirname(__FILE__).'/../assets/css/crud.css');
 $cs->registerCssFile($css);
 
-$this->pageTitle = ($this->object->isNewRecord ? 'Add' : 'Edit').' '.($this->object->isNewRecord ? get_class($this->object) : $this->object->name);
+$this->pageTitle = ($object->isNewRecord ? 'Add' : 'Edit').' '.($object->isNewRecord ? get_class($object) : $object->name);
 ?>
-<div class="header">
-  <h1><?= $this->pageTitle ?></h1>
+<div class="crud">
+  <div class="header"><h1><?= $this->pageTitle ?></h1></div>
 
-  <div id="actions">
-    <?= $this->object->getActionLink('admin') ?>
-    <? empty($this->object->id) or print($this->object->getActionLink('view')) ?>
+  <div class="actionBar">
+    <ul>
+      <li><?= $object->getActionLink('admin') ?></li>
+      <? if(!empty($object->id)): ?>
+      <li><?= $object->getActionLink('view') ?></li>
+      <? endif ?>
+    </ul>
   </div>
-</div>
 
-<div class="content">
-  <div class="edit">
-    <?= $form->render() ?>
+  <div class="layout">
+    <ul>
+      <li class="edit"><?= $form->render() ?></li>
+      <? if($object->id): ?>
+        <?= $this->renderPartial('related', array('object' => $object)) ?>
+      <? endif ?>
+    </ul>
   </div>
 </div>

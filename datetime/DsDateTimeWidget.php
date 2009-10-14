@@ -59,7 +59,7 @@ class DsDateTimeWidget extends CInputWidget
     $dateOptions=$this->dateOptions!==array() ? CJavaScript::encode($this->dateOptions) : '';
     empty($this->timeFormat) or $timeOptions=$this->timeOptions!==array() ? CJavaScript::encode($this->timeOptions) : '';
     $updateHiddenField="function() { var inputs = jQuery(\"#{$id} input\"); inputs.get(0).value = inputs.get(1).value";
-    if(empty($timeFormat)) {
+    if(empty($this->timeFormat)) {
       $updateHiddenField.="; }\n";
     } else {
       $updateHiddenField.=" + ".CJavascript::jsonEncode($this->separator)." + inputs.get(2).value; }\n";

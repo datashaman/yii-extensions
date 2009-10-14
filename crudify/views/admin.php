@@ -9,26 +9,22 @@ $this->pageTitle = 'Managing '.Inflect::pluralize(get_class($this->object));
 
 $routeVar = Yii::app()->getUrlManager()->routeVar;
 ?>
-<div class="header">
-  <h1><?= $this->pageTitle ?></h1>
-  <div id="actions">
-    <?= $this->object->getActionLink('add') ?>
+<div class="crud">
+  <div class="header"><h1><?= $this->pageTitle ?></h1></div>
+
+  <div class="actionBar">
+    <?= $this->_model->getActionLink('add') ?>
     <? $this->widget('CLinkPager',array('pages'=>$pages)) ?>
   </div>
-</div>
 
-<div class="content">
   <?= CHtml::beginForm($_SERVER['PHP_SELF'], 'GET') ?>
   <?= CHtml::hiddenField($routeVar, $_REQUEST[$routeVar]) ?>
   <?= CHtml::hiddenField('model', $_REQUEST['model']) ?>
   <table class="admin">
     <thead>
     <tr class="filters">
-      <? $filterAttributes = $this->object->filterAttributes;
-        foreach($attributes as $attribute): ?>
-        <th><?
-        if(in_array($attribute, $filterAttributes)) $this->renderFilterWidget($attribute);
-        ?></th>
+      <? foreach($attributes as $attribute): ?>
+        <th><?  $this->renderFilterWidget($attribute) ?></th>
       <? endforeach ?>
       <th></th>
     </tr>
@@ -41,7 +37,6 @@ $routeVar = Yii::app()->getUrlManager()->routeVar;
     </thead>
     <tbody>
     <? foreach($objects as $n=>$object): ?>
-      <? $object->attachBehavior('crudify', 'application.extensions.ds.crudify.CrudBehavior') ?>
       <tr class="<?= $n % 2 ? 'odd' : 'even' ?>">
         <? foreach($attributes as $attribute): ?>
         <td><? $object->renderAttributeElement($attribute) ?></td>
@@ -56,5 +51,4 @@ $routeVar = Yii::app()->getUrlManager()->routeVar;
     </tbody>
   </table>
   <?= CHtml::endForm() ?>
-  <br/>
 </div>

@@ -9,103 +9,114 @@
 @import blueprint/modules/interaction.sass
 //@import blueprint/modules/debug.sass
 
-=blueprint(!body_selector = "body")
-  +blueprint-typography(!body_selector)
-  //+blueprint-utilities
-  //+blueprint-grid
-  //+blueprint-debug
-  //+blueprint-interaction
-  //+blueprint-form
++blueprint-typography(".crud")
 
-+blueprint
+.crud
+  div.layout
+    :display table
+    :width 100%
+    :background #E6F2FF
+    :outline 2px #B7DDF2 solid
 
-#actions
-  font-size: medium
-  text-align: left
-  color: #fff
-  background: #B7DDF2
-  margin-bottom: 6px
+    & > ul
+      :display table-row
+      +no-bullets
 
-button
-  padding: 0
-  display: inline-block
-  img
-    vertical-align: middle
+      & > li
+        :padding 6px
+        :display table-cell
+        :vertical-align top
 
-div.edit
-  .label
-    margin-top: 0.4em
-
-div.edit, div.view
-  width: 60%
-  display: inline-block
-  background: #E6F2FF
-  border: 2px solid #B7DDF2
-
-  input, select, textarea
-
-  ul
-    +no-bullets
-    padding: 0
-    margin: 0
-
-  .row
-    overflow: auto
-    padding: 3px
-
-  .label, .value
-    float: left
-    display: block
-
-  .label
-    font-weight: bold
-    margin-right: 6px
-
-  .label, .value
-
-  .value
-    input, select, textarea
-
-  .buttons
-    :margin-top 6px
-
-  .value .validation-error
-    :background = !error_bg_color
-    :color = !error_color
-
-div.view .value
-
-div.errorSummary
-  +error
-
-table.admin
-  background: #B7DDF2
-  border-collapse: collapse
-  border: 2px #B7DDF2 solid
-  width: 100%
-
-  th, td
-
-  th
-    background: #d3dfee
+  .actionBar
+    font-size: medium
     text-align: left
-    border-bottom: 1px solid #E6F2FF
+    color: #fff
+    background: #B7DDF2
+    margin-bottom: 6px
+    padding: 6px
+    ul
+      +inline-list
 
-  tr.odd
-    background: #E6F2FF
+  button
+    padding: 0
+    display: inline-block
+    img
+      vertical-align: middle
 
-  .actions
-    width: 100px
-    text-align: right
+  li.related
+    :border-left 2px solid #B7DDF2
+    :min-width 50%
 
-  tr.filters
+    ul
+      +no-bullets
+      :margin 0
+      :font-size larger
+      a
+        :text-decoration none
+        img
+          vertical-align: top
+
+    .header
+      :font-size large
+
+    & > *
+      padding: 0 6px
+
+  li.view, li.edit
+    ul
+      :margin 0
+      :padding 0
+
+    .label, .value
+      padding: 3px
+      display: table-cell
+
+    .label
+      font-weight: bold
+      margin-right: 6px
+
+    .buttons
+      :margin-top 6px
+
+    .value .validation-error
+      :background = !error_bg_color
+      :color = !error_color
+
+  li.edit
+    .label
+      margin-top: 0.4em
+
+  div.errorSummary
+    +error
+
+  table.admin
+    background: #B7DDF2
+    border-collapse: collapse
+    border: 2px #B7DDF2 solid
+    width: 100%
+
     th
+      background: #d3dfee
+      text-align: left
+      border-bottom: 1px solid #E6F2FF
+
+    tr.odd
+      background: #E6F2FF
+
+    .actions
+      width: 100px
+      text-align: right
+      button
+        :margin-left 3px
+      white-space: nowrap
+
+    tr.filters th
       background: #B7DDF2
 
-  .filter
-    margin: 0
-    padding: 0
+    .filter
+      margin: 0
+      padding: 0
 
-ul.yiiPager
-  font-size: inherit !important
-  float: center
+  ul.yiiPager
+    font-size: inherit !important
+    float: center

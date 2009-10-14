@@ -2,27 +2,30 @@
 
 class CrudController extends CController
 {
-	/**
-	 * @var string specifies the default page size to be 10
-	 */
-	public $pageSize = 10;
+  /**
+   * @var string specifies the default page size to be 10
+   */
+  public $pageSize = 10;
 
-	/**
-	 * @var string specifies the default action to be 'admin'.
-	 */
-	public $defaultAction='admin';
+  /**
+   * @var string specifies the default action to be 'admin'.
+   */
+  public $defaultAction='admin';
 
-	/**
-	 * @var CActiveRecord the currently loaded data model instance.
-	 */
-	protected $object;
-	protected $criteria;
-  
+  /**
+   * @var CActiveRecord the currently loaded data model instance.
+   */
+  protected $_model;
+
+  protected $criteria;
+
+  private $_object;
+
   protected $filterWidgets = array();
 
   public function init()
   {
-    $this->criteria = new CDbCriteria();
+    parent::init();
 
     $cs = Yii::app()->getClientScript();
     $am = Yii::app()->getAssetManager();
@@ -30,150 +33,155 @@ class CrudController extends CController
     $js = $am->publish(dirname(__FILE__).'/assets/js/crud.js');
     $cs->registerScriptFile($js);
 
-    if(empty($_REQUEST['model'])) {
-      throw new CHttpException(400, "I don't know which model you want to manage. Please specify the 'model' parameter.");
+    empty($this->_model) && $this->model = empty($_REQUEST['model']) ? null : $_REQUEST['model'];
+  }
+
+  protected function getObject()
+  {
+    if(empty($this->_object)) {
+      $class = get_class($this->_model);
+      $this->_object = new $class;
+      empty($_GET[$class]) or $this->_object->setAttributes($_GET[$class]);
+    }
+    return $this->_object;
+  }
+
+  protected function setModel($className)
+  {
+    if(empty($className)) {
+      throw new CHttpException(400, "I don't know which class of model you want to manage. Please specify the model's class as the 'className' property in your controller configuration or as a query parameter.");
     } else {
-      $this->object = new $_REQUEST['model'];
-      $this->object->attachBehavior('crudify', 'application.extensions.ds.crudify.CrudBehavior');
+      $this->_model = CrudModel::model($className);
     }
   }
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		$filters = array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete',
-			//'ajaxOnly + autoComplete',
-			'identifier + view, edit, delete',
-			'filters',
-      //'addFilters',
-		);
+  /**
+   * @return array action filters
+   */
+  public function filters()
+  {
+    $filters = array(
+        'accessControl', // perform access control for CRUD operations
+        'postOnly + delete',
+        //'ajaxOnly + autoComplete',
+        //'identifier + view, edit, delete',
+        //'filters',
+        //'addFilters',
+        );
     return $filters;
-	}
+  }
 
   protected function renderFilterWidget($attribute)
   {
-    foreach($this->object->metaData->relations as $property => $relation) {
-      if($relation->foreignKey == $attribute && get_class($relation) == 'CBelongsToRelation') {
-        $foreignClass = $relation->className;
-        break;
-      }
-    }
+    $column = $this->_model->metaData->columns[$attribute];
+    $size = min($column->size, 20);
 
-    if(!empty($foreignClass)) {
-      $class = get_class($this->object);
-
-      $value = '';
-      if(!empty($_GET[$class][$attribute])) {
-        $this->object->$attribute = $_GET[$class][$attribute];
-        $value = $this->object->$property->name;
-      }
-
-      $hiddenId = CHtml::activeId($this->object, $attribute);
-
-      $this->widget('CAutoComplete', array(
+    $config = array(
         'id' => 'filter_'.$attribute,
-        'name' => 'q',
         'url' => $this->createUrl('crud/autoComplete'),
         'max' => 10,
-        'minChars' => 1,
+        'minChars' => 0,
         'delay' => 500,
         'matchCase' => false,
-        'mustMatch' => true,
-        'value' => $value,
-        'extraParams' => array('model' => $_GET['model'], 'relation' => $property),
-        'htmlOptions' => array('class' => 'filter', 'onchange' => 'if(jQuery("#filter_'.$attribute.'").val() == "") jQuery("#'.$hiddenId.'").val("");'),
-        'methodChain' => '.result(function(event,item){ jQuery("#'.$hiddenId.'").val(item[1]); this.form.submit(); })',
-      ));
-      echo CHtml::activeHiddenField($this->object, $attribute);
+        'extraParams' => array('model' => $_GET['model']),
+        'htmlOptions' => array('class' => 'filter', 'size' => $size, 'maxlength' => $column->size),
+        );
 
-      if(!empty($_GET[$class][$attribute])) {
-        echo CHtml::htmlButton($this->object->getActionLink('cross', false), array('type' => 'submit', 'alt' => 'Remove filter', 'title' => 'Remove filter', 'onclick' => 'jQuery("#'.$hiddenId.'").val("")'));
-      }
-    }
-  }
+    $thisClass = get_class($this->_model);
 
-  public function filterFilters($filterChain)
-  {
-    foreach(@$this->object->getFilterAttributes() as $attribute) {
-      $model = get_class($this->object);
-      if(!empty($_GET[$model][$attribute])) {
-        $this->object->$attribute = $_GET[$model][$attribute];
-        $this->criteria->addCondition("$attribute = {$_GET[$model][$attribute]}");
-      }
-    }
-
-    return $filterChain->run();
-  }
-
-  public function filterIdentifier($filterChain)
-  {
-    if(empty($_REQUEST['id'])) {
-      throw new CHttpException(400, "I don't know which object you want to edit. Please specify the 'id' parameter.");
+    if(empty($this->_model->metaData->tableSchema->foreignKeys[$attribute])) {
+      $config['name'] = $thisClass.'['.$attribute.']';
+      $config['mustMatch'] = false;
+      $config['extraParams']['attribute'] = $attribute;
+      empty($_GET[$thisClass][$attribute]) or $config['value'] = $_GET[$thisClass][$attribute];
+      $config['methodChain'] = '.result(function(event,item){ this.form.submit(); })';
+      $this->widget('CAutoComplete', $config);
+      $hiddenId = $config['id'];
     } else {
-      $this->object = $this->object->model()->findByPk($_REQUEST['id']);
+      foreach($this->_model->metaData->relations as $relation) {
+        if($relation->foreignKey == $attribute && get_class($relation) == 'CBelongsToRelation') {
+          $foreignClass = $relation->className;
+          break;
+        }
+      }
 
-      if(!$this->object)
-        throw new CHttpException(404, "I cannot find an object with that identifier. Perhaps it has been deleted?");
+      if(!empty($foreignClass)) {
+        $config['name'] = 'q';
+        $config['mustMatch'] = true;
+        $config['extraParams']['relation'] = $relation->name;
 
-      $this->object->attachBehavior('crudify', 'application.extensions.ds.crudify.CrudBehavior');
+        if(!empty($_GET[$thisClass][$attribute])) {
+          $this->getObject()->$attribute = $_GET[$thisClass][$attribute];
+          $config['value'] = $this->getObject()->{$relation->name}->name;
+        }
+
+        $hiddenId = CHtml::activeId($this->object, $attribute);
+        $config['htmlOptions']['onchange'] = 'if(jQuery("#filter_'.$attribute.'").val() == "") jQuery("#'.$hiddenId.'").val("");';
+        $config['methodChain'] = '.result(function(event,item){ jQuery("#'.$hiddenId.'").val(item[1]); this.form.submit(); })';
+
+        $this->widget('CAutoComplete', $config);
+        echo CHtml::activeHiddenField($this->object, $attribute);
+
+      }
     }
 
-    return $filterChain->run();
+    if(!empty($_GET[$thisClass][$attribute])) {
+        echo CHtml::htmlButton($this->object->getActionLink('cross', false), array('type' => 'submit', 'alt' => 'Remove filter', 'title' => 'Remove filter', 'onclick' => 'jQuery("#'.$hiddenId.'").val("")'));
+    }
   }
 
-	public function accessRules()
-	{
-		return array(
-			array('allow',
-				'actions'=>array('view'),
-				'users'=>array('*'),
-			),
-			array('allow',
-				'actions'=>array('add','edit','autoComplete'),
-				'users'=>array('@'),
-			),
-			array('allow',
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',
-				'users'=>array('*'),
-			),
-		);
-	}
+  public function accessRules()
+  {
+    return array(
+        array('allow',
+          'actions'=>array('view'),
+          'users'=>array('*'),
+          ),
+        array('allow',
+          'actions'=>array('add','edit','autoComplete'),
+          'users'=>array('@'),
+          ),
+        array('allow',
+          'actions'=>array('admin','delete'),
+          'users'=>array('admin'),
+          ),
+        array('deny',
+          'users'=>array('*'),
+          ),
+        );
+  }
 
-	public function actionView()
-	{
+  public function actionView()
+  {
     $folder = strtolower($_REQUEST['model'][0]).substr($_REQUEST['model'], 1);
     $view_file = $this->getViewPath()."/../$folder/view.php";
     $view = file_exists($view_file) ? "/$folder/view" : null;
 
-    Yii::app()->getClientScript()->registerScript('view', "$('div.view .label').autoWidth();");
+    Yii::app()->getClientScript()->registerScript('view', "$('.view .label').autoWidth();");
 
-		$this->render('view', array('view' => $view));
-	}
+    $object = $this->_model->filtered()->find();
+
+    $this->render('view', array('object' => $object, 'view' => $view));
+  }
 
   public function actionEdit()
   {
+    $object = $this->_model->filtered()->find();
+
     if(isset($_POST['attribute'], $_POST['value'])) {
       $attribute = preg_replace('/^.*_/', '', $_POST['attribute']);
-      $this->object->$attribute = $_POST['value'];
-      if($this->object->save()) {
+      $object->$attribute = $_POST['value'];
+      if($object->save()) {
         echo $_POST['value'];
         exit;
       }
     } else {
       $config = file_exists(Yii::getPathOfAlias('application.forms.'.$_REQUEST['model']).'.php') ? 'application.forms.'.$_REQUEST['model'] : null;
 
-      if($form = new CrudForm($config, $this->object, $this)
-        and $form->submitted('save')
-        and $this->object->save()) {
-        $route = array('view');
-        $route['id'] = $this->object->id;
+      if($form = new CrudForm($config, $object, $this)
+          and $form->submitted('save')
+          and $object->save()) {
+        $route = array('admin');
         $route['model'] = $_REQUEST['model'];
 
         Yii::app()->getUser()->setFlash('success', 'Object saved successfully');
@@ -183,9 +191,9 @@ class CrudController extends CController
       foreach($form->elements as $element)
         $element->layout = '<div class="label">{label}</div> <div class="value">{input}{error}</div>{hint}';
 
-      Yii::app()->getClientScript()->registerScript('edit', "$('div.edit .label').autoWidth(); var width = $('div.edit .label:eq(0)').width(); $('div.edit .buttons').css('margin-left', (width + 6) + 'px');");
+      Yii::app()->getClientScript()->registerScript('edit', "$('.edit .label').autoWidth(); var width = $('.edit .label:eq(0)').width();");
 
-      $this->render('edit', array('form' => $form));
+      $this->render('edit', array('form' => $form, 'object' => $object));
     }
   }
 
@@ -193,73 +201,76 @@ class CrudController extends CController
   {
     if(!empty($_REQUEST['id']))
       throw new CHttpException(400, "I don't need to know the identifier of an object if you're adding a new one.");
+
     $this->actionEdit();
   }
 
-	public function actionDelete()
-	{
-    $this->object->deleted_at = date('Y-m-d H:i:s');
-    $this->object->save();
+  public function actionDelete()
+  {
+    $object = $this->_model->find();
+    $object->deleted_at = date('Y-m-d H:i:s');
+    $object->save();
     $this->redirect(array('admin', $_GET));
-	}
+  }
 
-	public function actionAdmin()
-	{
-		$pages = new CPagination($this->object->model()->count());
-		$pages->pageSize = $this->pageSize;
-    $pages->applyLimit($this->criteria);
+  public function actionAdmin()
+  {
+    $criteria = new CDbCriteria();
 
-		$sort=new CSort(get_class($this->object));
-    $sort->applyOrder($this->criteria);
+    $pages = new CPagination($this->_model->filtered()->count());
+    $pages->pageSize = $this->pageSize;
+    $pages->applyLimit($criteria);
 
-		$objects = $this->object->model()->findAll($this->criteria);
+    $sort=new CSort(get_class($this->object));
+    $sort->applyOrder($criteria);
 
-    $attributes = $this->object->adminAttributes;
-    is_null($attributes) and $attributes = array_keys($this->object->attributes);
+    $objects = $this->_model->filtered()->findAll($criteria);
 
-		$this->render('admin', compact('attributes', 'objects', 'pages', 'sort'));
-	}
+    $attributes = $this->_model->adminAttributes;
+    is_null($attributes) and $attributes = array_keys($this->_model->attributes);
+
+    $this->render('admin', compact('attributes', 'objects', 'pages', 'sort'));
+  }
 
   public function actionAutoComplete()
   {
     if(isset($_GET['relation'], $_GET['q'])) {
-      foreach($this->object->metaData->relations as $property => $relation) {
-        if($property == $_GET['relation'] && is_a($relation, 'CBelongsToRelation')) {
-          $criteria = new CDbCriteria();
-          $criteria->addCondition("name like :q");
-          empty($relation->condition) or $criteria->addCondition($relation->condition);
-          $criteria->params = array(':q' => "%{$_GET['q']}%");
-          $criteria->limit = min(empty($_GET['limit']) ? 50 : (int) $_GET['limit'], 50);
+      $relation = $this->_model->metaData->relations[$_GET['relation']];
+      if(is_a($relation, 'CBelongsToRelation')) {
+        $thisTable = $this->_model->tableName();
 
-          $foreignObject = new $relation->className;
+        $object = new $relation->className();
+        $foreignTable = $object->tableName();
 
-          $result = '';
-          foreach($foreignObject->model()->findAll($criteria) as $object) {
-            $result .= $object->getAttribute('name').'|'.$object->getAttribute('id')."\n";
-          }
+        $criteria = array(
+          'select' => "{$foreignTable}.id, {$foreignTable}.name",
+          'condition' => "{$foreignTable}.name like :q",
+          'params' => array('q' => '%'.$_GET['q'].'%'),
+          'limit' => min(empty($_GET['limit']) ? 50 : $_GET['limit'], 50),
+          'join' => "inner join $thisTable on $thisTable.{$relation->foreignKey} = {$foreignTable}.id",
+        );
 
-          echo $result;
-          break;
-        }
+        empty($relation->condition) or $criteria['condition'] .= ' and '.$relation->condition;
       }
+    } else if(isset($_GET['attribute'])) {
+      $attribute = $_GET['attribute'];
+      $q = $_GET['q'];
+      $criteria = array(
+        'select' => "id, $attribute as name",
+        'condition' => "$attribute like :q and ($attribute is not null or $attribute = '')",
+        'params' => array(":q" => "%$q%"),
+      );
+      $object = $this->_model;
     }
-  }
 
-	protected function getRelatedLinks()
-  {
-    $links = array();
-    foreach($this->object->metaData->relations as $name => $relation) {
-      if(is_a($relation, 'CHasManyRelation')) {
-        $controller = strtolower($relation->className);
-        $links[] = $this->getRelatedLink($name, ucfirst($name), array($relation->foreignKey => $this->object->id));
+    if(isset($object, $criteria)) {
+      $result = '';
+      foreach($object->options($criteria)->findAll() as $object) {
+        $row = array_values($object->attributes);
+        $result .= $row[1].'|'.$row[0]."\n";
       }
-    }
-    return $links;
-  }
 
-  protected function getRelatedLink($controller, $title, $condition)
-  {
-    $parameters = um()->createUrl("$controller/list", $condition);
-    return CHtml::link($this->getActionLabel('admin', true, $title), $parameters, compact('title'));
+      echo $result;
+    }
   }
 }

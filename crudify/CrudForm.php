@@ -60,7 +60,6 @@ class CrudForm extends CForm
       $elements = array();
 
       $attributes = method_exists($model, 'getEditAttributes') ? $model->getEditAttributes() : array_keys($model->attributes);
-      $filterAttributes = $model->filterAttributes;
 
       foreach($attributes as $attribute) {
         if($this->readOnly) {
@@ -120,7 +119,11 @@ class CrudForm extends CForm
                 $required or $required = !$column->allowNull;
 
                 $foreign = call_user_func(array($relation->className, 'model'));
-                $items = CHtml::listData($foreign->findAll($relation->condition), 'id', 'name');
+
+                $criteria = empty($relation->condition) ? array() : array('condition' => $relation->condition);
+
+                $objects = $foreign->options($criteria)->findAll();
+                $items = CHtml::listData($objects, 'id', 'name');
                 $required or $items = array('' => $this->emptyMessage) + $items;
                 $elements[$attribute] = $this->defaults['select'];
                 $elements[$attribute]['items'] = $items;
@@ -152,5 +155,13 @@ class CrudForm extends CForm
     }
 
     parent::__construct($config, $model, $parent);
+  }
+
+  public function renderButtons()
+  {
+    $output='';
+    foreach($this->getButtons() as $button)
+      $output.=$this->renderElement($button);
+    return $output!=='' ? "<div class=\"row buttons\"><div class=\"label\"></div><div class=\"value\">".$output."</div></div>\n" : '';
   }
 }

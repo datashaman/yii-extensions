@@ -1,104 +1,75 @@
-body { line-height: 1.5; font-family: Helvetica Neue, Arial, Helvetica, sans-serif; color: #333333; font-size: 75%; }
+.crud { line-height: 1.5; font-family: Helvetica Neue, Arial, Helvetica, sans-serif; color: #333333; font-size: 75%; }
+.crud h1 { font-weight: normal; color: #222222; font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
+.crud h1 img { margin: 0; }
+.crud h2 { font-weight: normal; color: #222222; font-size: 2em; margin-bottom: 0.75em; }
+.crud h3 { font-weight: normal; color: #222222; font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
+.crud h4 { font-weight: normal; color: #222222; font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+.crud h5 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
+.crud h6 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; }
+.crud h2 img, .crud h3 img, .crud h4 img, .crud h5 img, .crud h6 img { margin: 0; }
+.crud p { margin: 0 0 1.5em; }
+.crud p img.left { display: inline; float: left; margin: 1.5em 1.5em 1.5em 0; padding: 0; }
+.crud p img.right { display: inline; float: right; margin: 1.5em 0 1.5em 1.5em; padding: 0; }
+.crud a { text-decoration: underline; color: #000099; }
+.crud a:visited { color: #000066; }
+.crud a:focus { color: black; }
+.crud a:hover { color: black; }
+.crud a:active { color: #cc0099; }
+.crud blockquote { margin: 1.5em; color: #666; font-style: italic; }
+.crud strong { font-weight: bold; }
+.crud em { font-style: italic; }
+.crud dfn { font-style: italic; font-weight: bold; }
+.crud sup, .crud sub { line-height: 0; }
+.crud abbr, .crud acronym { border-bottom: 1px dotted #666; }
+.crud address { margin: 0 0 1.5em; font-style: italic; }
+.crud del { color: #666; }
+.crud pre { margin: 1.5em 0; white-space: pre; }
+.crud pre, .crud code, .crud tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+.crud li ul, .crud li ol { margin: 0 1.5em; }
+.crud ul { margin: 0 1.5em 1.5em 1.5em; list-style-type: disc; }
+.crud ol { margin: 0 1.5em 1.5em 1.5em; list-style-type: decimal; }
+.crud dl { margin: 0 0 1.5em 0; }
+.crud dl dt { font-weight: bold; }
+.crud dd { margin-left: 1.5em; }
+.crud table { margin-bottom: 1.4em; width: 100%; }
+.crud th { font-weight: bold; }
+.crud thead th { background: #c3d9ff; }
+.crud th, .crud td, .crud caption { padding: 4px 10px 4px 5px; }
+.crud tr.even td { background: #e5ecf9; }
+.crud tfoot { font-style: italic; }
+.crud caption { background: #eee; }
+.crud .quiet { color: #666666; }
+.crud .loud { color: #111111; }
 
-h1 { font-weight: normal; color: #222222; font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
-h1 img { margin: 0; }
-
-h2 { font-weight: normal; color: #222222; font-size: 2em; margin-bottom: 0.75em; }
-
-h3 { font-weight: normal; color: #222222; font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
-
-h4 { font-weight: normal; color: #222222; font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
-
-h5 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
-
-h6 { font-weight: normal; color: #222222; font-size: 1em; font-weight: bold; }
-
-h2 img, h3 img, h4 img, h5 img, h6 img { margin: 0; }
-
-p { margin: 0 0 1.5em; }
-p img.left { display: inline; float: left; margin: 1.5em 1.5em 1.5em 0; padding: 0; }
-p img.right { display: inline; float: right; margin: 1.5em 0 1.5em 1.5em; padding: 0; }
-
-a { text-decoration: underline; color: #000099; }
-a:visited { color: #000066; }
-a:focus { color: black; }
-a:hover { color: black; }
-a:active { color: #cc0099; }
-
-blockquote { margin: 1.5em; color: #666; font-style: italic; }
-
-strong { font-weight: bold; }
-
-em { font-style: italic; }
-
-dfn { font-style: italic; font-weight: bold; }
-
-sup, sub { line-height: 0; }
-
-abbr, acronym { border-bottom: 1px dotted #666; }
-
-address { margin: 0 0 1.5em; font-style: italic; }
-
-del { color: #666; }
-
-pre { margin: 1.5em 0; white-space: pre; }
-
-pre, code, tt { font: 1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
-
-li ul, li ol { margin: 0 1.5em; }
-
-ul { margin: 0 1.5em 1.5em 1.5em; list-style-type: disc; }
-
-ol { margin: 0 1.5em 1.5em 1.5em; list-style-type: decimal; }
-
-dl { margin: 0 0 1.5em 0; }
-dl dt { font-weight: bold; }
-
-dd { margin-left: 1.5em; }
-
-table { margin-bottom: 1.4em; width: 100%; }
-
-th { font-weight: bold; }
-
-thead th { background: #c3d9ff; }
-
-th, td, caption { padding: 4px 10px 4px 5px; }
-
-tr.even td { background: #e5ecf9; }
-
-tfoot { font-style: italic; }
-
-caption { background: #eee; }
-
-.quiet { color: #666666; }
-
-.loud { color: #111111; }
-
-#actions { font-size: medium; text-align: left; color: #fff; background: #B7DDF2; margin-bottom: 6px; }
-
-button { padding: 0; display: inline-block; }
-button img { vertical-align: middle; }
-
-div.edit .label { margin-top: 0.4em; }
-
-div.edit, div.view { width: 60%; display: inline-block; background: #E6F2FF; border: 2px solid #B7DDF2; }
-div.edit ul, div.view ul { padding: 0; margin: 0; }
-div.edit ul li, div.view ul li { list-style-type: none; margin-left: 0px; }
-div.edit .row, div.view .row { overflow: auto; padding: 3px; }
-div.edit .label, div.edit .value, div.view .label, div.view .value { float: left; display: block; }
-div.edit .label, div.view .label { font-weight: bold; margin-right: 6px; }
-div.edit .buttons, div.view .buttons { margin-top: 6px; }
-div.edit .value .validation-error, div.view .value .validation-error { background: #fbe3e4; color: #8a1f11; }
-
-
-div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
-div.errorSummary a { color: #8a1f11; }
-
-table.admin { background: #B7DDF2; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
-table.admin th { background: #d3dfee; text-align: left; border-bottom: 1px solid #E6F2FF; }
-table.admin tr.odd { background: #E6F2FF; }
-table.admin .actions { width: 100px; text-align: right; }
-table.admin tr.filters th { background: #B7DDF2; }
-table.admin .filter { margin: 0; padding: 0; }
-
-ul.yiiPager { font-size: inherit !important; float: center; }
+.crud div.layout { display: table; width: 100%; background: #E6F2FF; outline: 2px #B7DDF2 solid; }
+.crud div.layout > ul { display: table-row; }
+.crud div.layout > ul li { list-style-type: none; margin-left: 0px; }
+.crud div.layout > ul > li { padding: 6px; display: table-cell; vertical-align: top; }
+.crud .actionBar { font-size: medium; text-align: left; color: #fff; background: #B7DDF2; margin-bottom: 6px; padding: 6px; }
+.crud .actionBar ul { list-style-type: none; margin: 0px; padding: 0px; display: inline; }
+.crud .actionBar ul li { margin: 0px; padding: 0px; display: inline; }
+.crud button { padding: 0; display: inline-block; }
+.crud button img { vertical-align: middle; }
+.crud li.related { border-left: 2px solid #B7DDF2; min-width: 50%; }
+.crud li.related ul { margin: 0; font-size: larger; }
+.crud li.related ul li { list-style-type: none; margin-left: 0px; }
+.crud li.related ul a { text-decoration: none; }
+.crud li.related ul a img { vertical-align: top; }
+.crud li.related .header { font-size: large; }
+.crud li.related > * { padding: 0 6px; }
+.crud li.view ul, .crud li.edit ul { margin: 0; padding: 0; }
+.crud li.view .label, .crud li.view .value, .crud li.edit .label, .crud li.edit .value { padding: 3px; display: table-cell; }
+.crud li.view .label, .crud li.edit .label { font-weight: bold; margin-right: 6px; }
+.crud li.view .buttons, .crud li.edit .buttons { margin-top: 6px; }
+.crud li.view .value .validation-error, .crud li.edit .value .validation-error { background: #fbe3e4; color: #8a1f11; }
+.crud li.edit .label { margin-top: 0.4em; }
+.crud div.errorSummary { padding: .8em; margin-bottom: 1em; border: 2px solid #dddddd; background: #fbe3e4; color: #8a1f11; border-color: #fbc2c4; }
+.crud div.errorSummary a { color: #8a1f11; }
+.crud table.admin { background: #B7DDF2; border-collapse: collapse; border: 2px #B7DDF2 solid; width: 100%; }
+.crud table.admin th { background: #d3dfee; text-align: left; border-bottom: 1px solid #E6F2FF; }
+.crud table.admin tr.odd { background: #E6F2FF; }
+.crud table.admin .actions { width: 100px; text-align: right; white-space: nowrap; }
+.crud table.admin .actions button { margin-left: 3px; }
+.crud table.admin tr.filters th { background: #B7DDF2; }
+.crud table.admin .filter { margin: 0; padding: 0; }
+.crud ul.yiiPager { font-size: inherit !important; float: center; }

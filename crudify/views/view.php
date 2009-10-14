@@ -4,39 +4,41 @@ $am = Yii::app()->getAssetManager();
 $css = $am->publish(dirname(__FILE__).'/../assets/css/crud.css');
 $cs->registerCssFile($css);
 
-$this->pageTitle = 'View '.$this->object->name;
+$this->pageTitle = 'View '.$object->name;
 ?>
-<div class="header">
-  <h1><?= $this->pageTitle ?></h1>
+<div class="crud">
+  <div class="header"><h1><?= $this->pageTitle ?></h1></div>
 
-  <div id="actions">
-    <?= $this->object->getActionLink('admin') ?>
-    <?= $this->object->getActionLink('add') ?>
-    <?= $this->object->getActionLink('edit') ?>
-    <?= $this->object->getActionLink('delete') ?>
+  <div class="actionBar">
+    <ul>
+      <li><?= $object->getActionLink('admin') ?></li>
+      <li><?= $object->getActionLink('add') ?></li>
+      <li><?= $object->getActionLink('edit') ?></li>
+      <li><?= $object->getActionLink('delete') ?></li>
+    </ul>
   </div>
-</div>
 
-<div class="content">
   <? if(empty($view)):
        if(empty($columns)):
-         $columns = $this->object->metaData->columns;
+         $columns = $object->metaData->columns;
          unset($columns['id']);
        endif;
   ?>
 
-  <div class="view">
+  <div class="layout">
     <ul>
-    <? foreach($columns as $column): ?>
-      <li class="row">
-        <span class="label"><label><?= $this->object->getAttributeLabel($column->name) ?></label></span>
-        <span class="value"><? $this->object->renderAttributeElement($column->name) ?></span>
+      <li class="view">
+        <ul>
+        <? foreach($columns as $column): ?>
+          <li class="row">
+            <span class="label"><label><?= $object->getAttributeLabel($column->name) ?></label></span>
+            <span class="value"><? $object->renderAttributeElement($column->name) ?></span>
+          </li>
+        <? endforeach ?>
+        </ul>
       </li>
-    <? endforeach ?>
+      <?= $this->renderPartial('related', array('object' => $object)) ?>
     </ul>
   </div>
-  <? else:
-       $this->renderPartial($view);
-     endif
-  ?>
+  <? else: $this->renderPartial($view); endif ?>
 </div>
