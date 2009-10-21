@@ -20,6 +20,11 @@ abstract class CrudController extends CController
     if(empty($session['returnStack'])) {
       $session['returnStack'] = array();
     }
+
+    if(isset($_GET['returnUrl'])) {
+      $this->setReturnUrl($_GET['returnUrl']);
+      unset($_GET['returnUrl']);
+    }
   }
 
   public function returnTo($default = null)
@@ -32,14 +37,14 @@ abstract class CrudController extends CController
   public function setReturnUrl($url)
   {
     $session = Yii::app()->session;
-    array_push($session['returnStack'], $url);
+    array_push($session->itemAt('returnStack'), $url);
     return $url;
   }
 
   public function getReturnUrl()
   {
     $session = Yii::app()->session;
-    $url = array_pop($session['returnStack']);
+    $url = array_pop($session->itemAt('returnStack'));
     return $url;
   }
 
@@ -296,6 +301,7 @@ abstract class CrudController extends CController
 
           $parameters = array(
             $foreignModel->metaData->tableSchema->primaryKey => $object->{$relation->foreignKey},
+            'returnUrl' => $_SERVER['REQUEST_URI']
           );
 
           $link = Yii::app()->controller->createUrl("/$controllerId/edit", $parameters);
