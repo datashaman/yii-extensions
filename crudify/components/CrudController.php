@@ -15,6 +15,32 @@ abstract class CrudController extends CController
       $this->setModelClass($this->modelClass);
     }
     $this->assetPath = Yii::app()->getAssetManager()->publish(Yii::app()->basePath.'/assets');
+
+    $session = Yii::app()->session;
+    if(empty($session['returnStack'])) {
+      $session['returnStack'] = array();
+    }
+  }
+
+  public function returnTo($default = null)
+  {
+    $url = $this->getReturnUrl();
+    empty($url) and $url = $default;
+    empty($url) or $this->redirect($url);
+  }
+
+  public function setReturnUrl($url)
+  {
+    $session = Yii::app()->session;
+    array_push($session['returnStack'], $url);
+    return $url;
+  }
+
+  public function getReturnUrl()
+  {
+    $session = Yii::app()->session;
+    $url = array_pop($session['returnStack']);
+    return $url;
   }
 
   public function setModelClass($modelClass)

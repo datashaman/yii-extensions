@@ -28,10 +28,14 @@ class CrudActionEdit extends CrudActionBase
         case 'GET':
         case 'POST':
           $form = new CrudForm($object->formConfig, $object, $this->controller);
-          if($form and $form->submitted('save')
-              and $object->save()) {
-            Yii::app()->getUser()->setFlash('success', 'Object saved successfully');
-            $this->controller->redirect(array('admin'));
+          if($form and $form->submitted('save')) {
+            try {
+              $object->save();
+              Yii::app()->getUser()->setFlash('success', 'Object saved successfully');
+              $this->controller->returnTo(array('admin'));
+            } catch(CDbException $e) {
+              Yii::app()->getUser()->setFlash('error', 'There was an error saving the object:<br/><br/>'.$e->getMessage());
+            }
           }
 
           foreach($form->elements as $element)

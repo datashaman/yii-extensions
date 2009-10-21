@@ -43,10 +43,12 @@ class CrudModel extends CActiveRecord
 
       $this->updated_by_id = $user_id;
       $this->updated_at = $now;
-    }
 
-    foreach($this->metaData->tableSchema->foreignKeys as $column => $key) {
-      if($this->$column == '') $this->$column = null;
+      foreach($this->metaData->tableSchema->foreignKeys as $column => $key) {
+        if($this->$column === '') {
+          $this->$column = null;
+        }
+      }
     }
 
     return $result;
@@ -199,5 +201,11 @@ class CrudModel extends CActiveRecord
   {
     $config = new CrudFormConfig($this);
     return $config->generate($this);
+  }
+
+  public function getFormHints()
+  {
+    return array(
+    );
   }
 }
