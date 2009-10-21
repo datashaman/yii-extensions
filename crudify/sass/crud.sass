@@ -9,114 +9,135 @@
 @import blueprint/modules/interaction.sass
 //@import blueprint/modules/debug.sass
 
-+blueprint-typography(".crud")
+.layout
+  :display table
+  :width 100%
+  :background #E6F2FF
+  :outline 2px #B7DDF2 solid
 
-.crud
-  div.layout
-    :display table
+  & > ul
+    :display table-row
+    +no-bullets
+
+    & > li
+      :display table-cell
+      :vertical-align top
+
+li.view, div.view, li.form, div.form
+  padding: 6px
+  ul
+    :margin 0
+    :padding 0
+
+  .label, .value
+    padding: 3px
+    display: table-cell
+    vertical-align: top
+
+  .label
+    font-weight: bold
+    margin-right: 6px
+
+  .buttons
+    :margin-top 6px
+
+  .value .validation-error
+    :background = !error_bg_color
+    :color = !error_color
+
+li.form, div.form
+  .label
+    margin-top: 0.4em
+
+div.actionBar
+  font-size: medium
+  text-align: left
+  color: #fff
+  background: #B7DDF2
+  padding: 6px
+  margin-bottom: 6px
+
+  ul
+    +inline-list
+
+button
+  padding: 0
+  display: inline-block
+  img
+    vertical-align: middle
+
+li.relations
+  :border-left 2px solid #B7DDF2
+  :width 30%
+
+  ul
+    display: table
     :width 100%
-    :background #E6F2FF
-    :outline 2px #B7DDF2 solid
+    :margin 0
+    +no-bullets
 
-    & > ul
-      :display table-row
-      +no-bullets
-
-      & > li
-        :padding 6px
-        :display table-cell
-        :vertical-align top
-
-  .actionBar
-    font-size: medium
-    text-align: left
-    color: #fff
-    background: #B7DDF2
-    margin-bottom: 6px
-    padding: 6px
-    ul
-      +inline-list
-
-  button
-    padding: 0
-    display: inline-block
-    img
-      vertical-align: middle
-
-  li.related
-    :border-left 2px solid #B7DDF2
-    :min-width 50%
-
-    ul
-      +no-bullets
-      :margin 0
-      :font-size larger
-      a
-        :text-decoration none
-        img
-          vertical-align: top
-
-    .header
-      :font-size large
-
-    & > *
-      padding: 0 6px
-
-  li.view, li.edit
-    ul
-      :margin 0
-      :padding 0
-
-    .label, .value
-      padding: 3px
-      display: table-cell
-
-    .label
-      font-weight: bold
-      margin-right: 6px
-
-    .buttons
-      :margin-top 6px
-
-    .value .validation-error
-      :background = !error_bg_color
-      :color = !error_color
-
-  li.edit
-    .label
-      margin-top: 0.4em
-
-  div.errorSummary
-    +error
-
-  table.admin
-    background: #B7DDF2
-    border-collapse: collapse
-    border: 2px #B7DDF2 solid
-    width: 100%
-
-    th
-      background: #d3dfee
-      text-align: left
-      border-bottom: 1px solid #E6F2FF
-
-    tr.odd
-      background: #E6F2FF
-
-    .actions
-      width: 100px
-      text-align: right
-      button
-        :margin-left 3px
-      white-space: nowrap
-
-    tr.filters th
+  li
+    :display table-row
+    &.odd
       background: #B7DDF2
+    & > *
+      :text-decoration none
+      :font-size large
+      :display table-cell
+      :vertical-align middle
+      :padding 6px
+      &.icon
+        :width 32px
+      &.label
+      &.value
+        :text-align right
 
-    .filter
-      margin: 0
-      padding: 0
+  .hasMany
+  .belongsTo
+  .stat
 
-  ul.yiiPager
-    font-size: inherit !important
-    float: center
+  img
+    width: 32px
+    height: 32px
+    vertical-align: middle
+
+  .header
+    :font-size large
+
+  & > *
+    padding: 0
+    
+.errorSummary
+  +error
+
+table.index
+  background: #B7DDF2
+  border-collapse: collapse
+  border: 2px #B7DDF2 solid
+  width: 100%
+
+  th
+    background: #d3dfee
+    text-align: left
+    border-bottom: 1px solid #E6F2FF
+
+  tr.odd
+    background: #E6F2FF
+
+  .actions
+    width: 100px
+    text-align: right
+    button
+      :margin-left 3px
+    white-space: nowrap
+
+  tr.filters th
+    background: #B7DDF2
+
+  .filter
+    margin: 0
+    padding: 0
+
+.pager
+  font-size: inherit !important
+  text-align: right

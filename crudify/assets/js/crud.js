@@ -35,3 +35,21 @@ jQuery.fn.autoWidth = function(options) {
 
   this.width(maxWidth);
 }
+
+function setFlash(class, message)
+{
+  jQuery('#flash').html('<div class="' + class + '">' + message + '</div>');
+  setTimeout('jQuery("#flash div").fadeOut("slow");', 3000);
+}
+
+
+function handleSuccess(request, response)
+{
+  setFlash('success', response);
+  location.reload(true);
+}
+
+function handleError(request, response, error)
+{
+  setFlash('error', response);
+}
