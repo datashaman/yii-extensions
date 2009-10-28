@@ -2,7 +2,7 @@
 $cs = Yii::app()->getClientScript();
 
 $cs->registerScriptFile($this->assetPath.'/js/crud.js');
-$cs->registerCssFile($this->assetPath.'/css/crud.css');
+$cs->registerCssFile($this->assetPath.'/css/modules/crud.css');
 
 $controllerId = Yii::app()->controller->getControllerId(get_class($model));
 ?>
@@ -15,15 +15,11 @@ $controllerId = Yii::app()->controller->getControllerId(get_class($model));
     <div class="pager"><? $this->widget('CLinkPager',array('pages'=>$pages)) ?></div>
   </div>
 
-  <? if(empty($objects)): ?>
-  No records
-  <? else: ?>
-  <? $select = $criteria->select ?>
-  <table class="admin">
+  <table class="manage">
     <thead>
     <tr>
-      <? foreach($select as $attribute): ?>
-        <?= CHtml::tag('th', array(), $sort->link($attribute)) ?>
+      <? foreach($criteria->select as $attribute): ?>
+        <?= CHtml::tag('th', array(), $sort->link($attribute, @$labels[$attribute])) ?>
       <? endforeach ?>
       <th></th>
     </tr>
@@ -32,5 +28,4 @@ $controllerId = Yii::app()->controller->getControllerId(get_class($model));
     <? $this->renderAdmin($controllerId, $criteria, $objects, $sort) ?>
     </tbody>
   </table>
-  <? endif ?>
 </div>

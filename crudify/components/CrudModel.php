@@ -6,6 +6,8 @@ class CrudModel extends CActiveRecord
   private $_primaryKey;
   private $_originalKey;
 
+  public $formHints = array();
+
   public function afterFind()
   {
     $this->_originalKey = parent::getPrimaryKey();
@@ -43,12 +45,6 @@ class CrudModel extends CActiveRecord
 
       $this->updated_by_id = $user_id;
       $this->updated_at = $now;
-
-      foreach($this->metaData->tableSchema->foreignKeys as $column => $key) {
-        if($this->$column === '') {
-          $this->$column = null;
-        }
-      }
     }
 
     return $result;
@@ -57,7 +53,8 @@ class CrudModel extends CActiveRecord
   public function afterSave()
   {
     $this->_originalKey = parent::getPrimaryKey();
-    parent::afterSave();
+    $result = parent::afterSave();
+    return $result;
   }
 
   public function renderProperty($property, $params = array(), $htmlOptions = array()) {
@@ -126,8 +123,9 @@ class CrudModel extends CActiveRecord
         if(preg_match('/uri$/', $property)) {
           echo empty($this->$property) ? '-' : CHtml::link($this->$property, $this->$property, $htmlOptions);
           return;
+        } else if(preg_match('/^is_/', $property)) {
+          echo empty($this->$property) ? '-' : CHtml::checkBox($property, $this->$property == 1, $htmlOptions);
         } else {
-
           echo empty($this->$property) ? '-' : $this->$property;
         }
       }
@@ -160,10 +158,10 @@ class CrudModel extends CActiveRecord
     empty($criteria) or $this->getDbCriteria()->mergeWith($criteria);
 
     foreach($this->attributeNames() as $attribute) {
-      if(!empty($_REQUEST[$attribute])) {
+      if(!empty($_GET[$attribute])) {
         $criteria = array(
           'condition' => "$attribute = :$attribute",
-          'params' => array(":$attribute" => $_REQUEST[$attribute]),
+          'params' => array(":$attribute" => $_GET[$attribute]),
         );
         $this->getDbCriteria()->mergeWith($criteria);
       }
@@ -187,7 +185,7 @@ class CrudModel extends CActiveRecord
 
   public function options($criteria = array())
   {
-    $tableAlias = $this->tableName();
+    $tableAlias = empty($criteria->alias) ? $this->tableName() : $criteria->alias;
     $dbCriteria = $this->getDbCriteria();
     $dbCriteria->mergeWith(array(
       'select' => "distinct $tableAlias.id, $tableAlias.name",
@@ -197,15 +195,31 @@ class CrudModel extends CActiveRecord
     return $this;
   }
 
-  public function getFormConfig()
+  public function getFormConfig($id)
   {
-    $config = new CrudFormConfig($this);
-    return $config->generate($this);
+    $config = new CrudFormConfig();
+    return $config->generate($this, $id);
   }
 
-  public function getFormHints()
+  public function getFormHints($attribute)
   {
-    return array(
-    );
+    return isset($this->formHints[$model->scenario]) ? $this->formHints[$model->scenario] : $this->formHints;
+  }
+
+  public function getForm($id, $parent = null)
+  {
+    $form = new CrudForm($this, $id, $parent);
+
+    if($form->submitted('submit'.ucfirst($id))) {
+      if($form->validate()) {
+        $result = $this->save();
+        if($result!==false) {
+          throw new FormSuccessException($this);
+        }
+      }
+      throw new FormFailException($this);
+    }
+
+    return $form;
   }
 }

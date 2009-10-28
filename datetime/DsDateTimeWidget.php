@@ -6,8 +6,14 @@ class DsDateTimeWidget extends CInputWidget
 
   public $separator = ' ';
 
-  public $dateOptions = array();
-  public $timeOptions = array();
+  public $dateOptions = array(
+    'dateFormat' => 'ymd-'
+  );
+
+  public $timeOptions = array(
+    'show24Hours' => true,
+    'showSeconds' => true,
+  );
 
   public function run()
   {
@@ -62,7 +68,7 @@ class DsDateTimeWidget extends CInputWidget
     if(empty($this->timeFormat)) {
       $updateHiddenField.="; }\n";
     } else {
-      $updateHiddenField.=" + ".CJavascript::jsonEncode($this->separator)." + inputs.get(2).value; }\n";
+      $updateHiddenField.=" + ".CJavaScript::jsonEncode($this->separator)." + inputs.get(2).value; }\n";
     }
     $js="jQuery(\"#{$id} input:eq(1)\").dateEntry({$dateOptions}).change({$updateHiddenField});\n";
     empty($this->timeFormat) or $js.= "jQuery(\"#{$id} input:eq(2)\").timeEntry({$timeOptions}).change({$updateHiddenField});\n";

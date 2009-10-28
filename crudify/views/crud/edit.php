@@ -1,11 +1,10 @@
 <?
 $cs = Yii::app()->getClientScript();
 
-$cs->registerCssFile($this->assetPath.'/css/crud.css');
+$cs->registerCssFile($this->assetPath.'/css/modules/crud.css');
 $cs->registerScriptFile($this->assetPath.'/js/crud.js');
-$cs->registerScript('edit', "$('.form .label').autoWidth();");
 
-$this->pageTitle = ($object->isNewRecord ? 'Add' : 'Edit').' '.$object->classTitle;
+empty($this->pageTitle) and $this->pageTitle = ($object->isNewRecord ? 'Add' : 'Edit').' '.$object->classTitle;
 if(!$object->isNewRecord) $this->pageTitle .= ': '.$object->name;
 ?>
 <div class="crud">

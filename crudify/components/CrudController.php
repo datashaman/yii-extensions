@@ -14,6 +14,7 @@ abstract class CrudController extends CController
     if(empty($this->model) && !empty($this->modelClass)) {
       $this->setModelClass($this->modelClass);
     }
+
     $this->assetPath = Yii::app()->getAssetManager()->publish(Yii::app()->basePath.'/assets');
 
     $session = Yii::app()->session;
@@ -25,6 +26,11 @@ abstract class CrudController extends CController
       $this->setReturnUrl($_GET['returnUrl']);
       unset($_GET['returnUrl']);
     }
+
+    $cs = Yii::app()->clientScript;
+
+    $cs->registerScriptFile($this->assetPath.'/js/crud.js');
+    $cs->registerCssFile($this->assetPath.'/css/modules/crud.css');
   }
 
   public function returnTo($default = null)
@@ -69,38 +75,6 @@ abstract class CrudController extends CController
     return $this->_models[$modelClass];
   }
 
-  public function getObject()
-  {
-    if($this->action->id == 'add') {
-      $object = new $this->model;
-      if(!empty($this->defaultValues)) {
-        foreach($this->defaultValues as $attribute => $value) {
-          isset($this->defaultValues[$attribute]) and $object->$attribute = $this->defaultValues[$attribute];
-        }
-      }
-    } else {
-      $object = $this->model->filtered()->find();
-      if(!$object) {
-        throw new CHttpException(404, 'Object not found');
-      }
-    }
-    return $object;
-  }
-
-  public function getAdminAttributes($model = null)
-  {
-    empty($model) and $model = $this->model;
-
-    $attributes = array();
-    foreach($model->metaData->columns as $column) {
-      foreach(array('created', 'updated', 'deleted') as $action) {
-        if($column->name == "{$action}_by_id" || $column->name == "{$action}_at") continue 2;
-      }
-      $attributes[] = $column->name;
-    }
-    return $attributes;
-  }
-
   public function getPage($model = null, $criteria = array())
   {
     is_null($model) and $model = $this->model;
@@ -128,6 +102,8 @@ abstract class CrudController extends CController
       echo '<tr class="'.($n % 2 ? 'odd' : 'even').'">';
 
       foreach($criteria->select as $attribute) {
+        echo '<td>';
+
         if(!empty($sort->attributes[$attribute]) && strpos($sort->attributes[$attribute], '.') !== false) {
           $relationName = $relationAttribute = null;
           list($relationName, $relationAttribute) = preg_split('/\./', $sort->attributes[$attribute]);
@@ -137,9 +113,10 @@ abstract class CrudController extends CController
             echo '</td>';
             continue;
           }
+        } else {
+          empty($object) ? '-' : $object->renderProperty($attribute);
         }
-        echo '<td>';
-        empty($object) ? '-' : $object->renderProperty($attribute);
+
         echo '</td>';
       }
 
@@ -172,7 +149,6 @@ abstract class CrudController extends CController
       'add' => array(
         'class' => 'crud.components.actions.CrudActionEdit',
         'model' => $model,
-        'defaultValues' => $_GET,
       ),
       'delete' => array(
         'class' => 'crud.components.actions.CrudActionDelete',
@@ -189,26 +165,6 @@ abstract class CrudController extends CController
     );
   }
 
-  public function filters()
-  {
-    $filters = array(
-        'accessControl',
-        'postOnly + delete',
-        //'ajaxOnly + autoComplete, delete',
-    );
-    return $filters;
-  }
-
-  public function accessRules()
-  {
-    return array(
-        array('allow', 'actions'=>array('index'), 'users'=>array('*')),
-        array('allow', 'actions'=>array('add','edit','autoComplete'), 'users'=>array('@')),
-        array('allow', 'actions'=>array('admin','delete'), 'users'=>array('admin'), 'verbs'=>array('GET','POST','DELETE')),
-        array('deny', 'users'=>array('*'))
-    );
-  }
-
   public function getActionLink($url, $labelled = true, $title = null, $method = 'htmlButton', $icon_size = '16x16') {
     $src = null;
 
@@ -220,6 +176,7 @@ abstract class CrudController extends CController
 
       empty($actionId) and $actionId = $controllerId and $controllerId = $this->id;
 
+/*
       if($actionId != 'admin' && $actionId != 'edit') {
         $model = call_user_func(array($this->modelClass, 'model'));
         foreach($model->attributeNames() as $attribute) {
@@ -228,13 +185,15 @@ abstract class CrudController extends CController
         $primaryKey = $this->model->metaData->tableSchema->primaryKey;
         if($actionId == 'add') unset($parameters[$primaryKey]);
       }
+      */
 
+      $class = 'ui-state-default';
 
       switch($actionId) {
         case 'delete':
-          $actionId = 'edit';
-          $url = $this->createUrl($controllerId.'/'.$actionId, $parameters);
+          $url = $this->createUrl($controllerId.'/edit', $parameters);
           return CHtml::$method($this->getActionLabel($actionId, $labelled, 'Delete'), array(
+                'class' => $class,
                 'confirm'=>"Are you sure you want to delete this object?",
                 'title' => 'Delete',
                 'ajax' => array(
@@ -262,7 +221,7 @@ abstract class CrudController extends CController
           if($method == 'link') {
             return CHtml::$method($this->getActionLabel($actionId, $labelled, $title, $src), $url, array('title' => $this->humanize($actionId)));
           } else {
-            return CHtml::$method($this->getActionLabel($actionId, $labelled, $title, $src), array('title' => $this->humanize($actionId), 'onclick' => 'location.href='.CJavaScript::encode($url)));
+            return CHtml::$method($this->getActionLabel($actionId, $labelled, $title, $src), array('class' => $class, 'title' => $this->humanize($actionId), 'onclick' => 'location.href='.CJavaScript::encode($url)));
           }
       }
     }
@@ -286,7 +245,7 @@ abstract class CrudController extends CController
 
   public function getRelations($object)
   {
-    $relations = array(CActiveRecord::HAS_MANY => array(), CActiveRecord::BELONGS_TO => array());
+    $relations = array(CActiveRecord::MANY_MANY => array(), CActiveRecord::HAS_MANY => array(), CActiveRecord::BELONGS_TO => array());
 
     foreach($object->metaData->relations as $relation) {
       $primaryKey = $object->metaData->tableSchema->primaryKey;
@@ -312,6 +271,7 @@ abstract class CrudController extends CController
           $relations[CActiveRecord::BELONGS_TO][$relation->name] = compact('relation', 'link', 'icon');
           break;
         case 'CHasManyRelation':
+        case 'CManyManyRelation':
           foreach($object->metaData->relations as $foreignName => $foreignRelation) {
             if($foreignRelation->className == get_class($object) && is_a($foreignRelation, 'CBelongsToRelation')) {
               if(!empty($foreignRelation->condition)) {
@@ -334,7 +294,7 @@ abstract class CrudController extends CController
           $relations[CActiveRecord::HAS_MANY][$relation->name] = compact('relation', 'link', 'icon');
           break;
         default:
-          var_dump("Unhandled relation $relation");
+          var_dump("Unhandled relation $relation->name");
           continue;
       }
     }
@@ -345,5 +305,40 @@ abstract class CrudController extends CController
   public function humanize($string)
   {
     return ucfirst(str_replace('_', ' ', $string));
+  }
+
+  public function setParam($name, $value)
+  {
+    $_GET[$name] = $_POST[$name] = $_REQUEST[$name] = $value;
+  }
+
+  public function mergeRelationCondition($criteria, $relationName)
+  {
+    $relation = $this->model->metaData->relations[$relationName];
+
+    $sort = new CSort($relation->className);
+    $sort->applyOrder($criteria);
+
+    $columns = $relation->foreignKey;
+    is_array($columns) or $columns = array($columns);
+    foreach($columns as $column) {
+      if(isset($_GET[$column])) {
+        $criteria->mergeWith(array(
+          'condition' => "$relationName.$column = :{$column}",
+          'params' => array(":{$column}" => $_GET[$column]),
+        ));
+      }
+    }
+  }
+
+  public function generateWith($relation, $select)
+  {
+    $with = compact('select');
+    $parameter = "{$relation}_id";
+    if(isset($_GET[$parameter])) {
+      $with['condition'] = "$relation.id = :{$parameter}";
+      $with['params'] = array(":{$parameter}" => $_GET[$parameter]);
+    }
+    return $with;
   }
 }

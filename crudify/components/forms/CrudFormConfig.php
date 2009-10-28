@@ -1,6 +1,8 @@
 <?php
 class CrudFormConfig extends CApplicationComponent
 {
+  public $id = null;
+
   protected $defaults = array(
       'hidden' => array('type' => 'hidden'),
       'text' => array('type' => 'text', 'size' => 40),
@@ -9,6 +11,7 @@ class CrudFormConfig extends CApplicationComponent
       'date' => array('type' => 'application.extensions.ds.datetime.DsDateTimeWidget', 'timeFormat' => null),
       'datetime' => array('type' => 'application.extensions.ds.datetime.DsDateTimeWidget'),
       'float' => array('type' => 'text', 'size' => 10),
+      'tinyint(1)' => array('type' => 'checkbox'),
       );
 
   public $readOnly = false;
@@ -38,9 +41,9 @@ class CrudFormConfig extends CApplicationComponent
     return array('type' => 'string', 'content' => $content);
   }
 
-  public function generate($model)
+  public function generate($model, $id)
   {
-    CHtml::$errorCss = 'validation-error';
+    CHtml::$errorCss = 'ui-state-error';
 
     if(empty($config)) {
       $hints = $model->formHints;
@@ -95,28 +98,29 @@ class CrudFormConfig extends CApplicationComponent
 
               $column = $columns[$attribute];
 
-              foreach($model->metaData->relations as $property => $relation) {
-                if($relation->foreignKey === $attribute && get_class($relation) == 'CBelongsToRelation') {
-                  $required = false;
+              if($foreignKey = @$model->metaData->tableSchema->foreignKeys[$attribute]) {
+                foreach($model->metaData->relations as $property => $relation) {
+                  if($relation->foreignKey == $attribute && is_a($relation, 'CBelongsToRelation')) {
+                    $required = false;
 
-                  foreach($validators as $validator) {
-                    if(is_a($validator, 'CRequiredValidator')) {
-                      $required = true;
-                      break;
+                    foreach($validators as $validator) {
+                      if(is_a($validator, 'CRequiredValidator')) {
+                        $required = true;
+                        break;
+                      }
                     }
+
+                    $required or $required = !$column->allowNull;
+
+                    $foreign = call_user_func(array($relation->className, 'model'));
+                    empty($relation->alias) and $relation->alias = $relation->name;
+
+                    $objects = $foreign->options($relation)->findAll();
+                    $items = CHtml::listData($objects, 'id', 'name');
+                    $required or $items = array('' => $this->listPrompt) + $items;
+                    $element = $this->defaults['select'];
+                    $element['items'] = $items;
                   }
-
-                  $required or $required = !$column->allowNull;
-
-                  $foreign = call_user_func(array($relation->className, 'model'));
-
-                  $objects = $foreign->options($relation)->findAll();
-                  $items = CHtml::listData($objects, 'id', 'name');
-                  $required or $items = array('' => $this->listPrompt) + $items;
-                  $element = $this->defaults['select'];
-                  $element['items'] = $items;
-
-                  break;
                 }
               }
 
@@ -144,10 +148,11 @@ class CrudFormConfig extends CApplicationComponent
       }
 
       $buttons = array(
-          'save' => array('type' => 'htmlButton', 'label' => Yii::app()->controller->getActionLabel('save'), 'buttonType' => 'submit')
-          );
+        'submit'.ucfirst($id) => array('type' => 'htmlButton', 'label' => Yii::app()->controller->getActionLabel('save'), 'buttonType' => 'submit', 'class' => 'ui-state-default')
+      );
 
       $config = compact('elements', 'buttons');
+      $config['id'] = $id;
 
       return $config;
     }

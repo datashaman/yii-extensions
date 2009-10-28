@@ -5,7 +5,7 @@ $relations = $this->getRelations($object)
   <ul>
     <?
     $index = 0;
-    foreach(array(CActiveRecord::BELONGS_TO, CActiveRecord::HAS_MANY) as $type):
+    foreach(array(CActiveRecord::HAS_MANY, CActiveRecord::MANY_MANY, CActiveRecord::BELONGS_TO) as $type):
       $items = $relations[$type];
       foreach($items as $item):
         $class = $index%2 ? 'odd' : 'even';
