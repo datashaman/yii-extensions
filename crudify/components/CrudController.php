@@ -33,6 +33,12 @@ abstract class CrudController extends CController
     $cs->registerCssFile($this->assetPath.'/css/modules/crud.css');
   }
 
+  public function render($view, $data = array(), $return = false)
+  {
+    $method = Yii::app()->request->isAjaxRequest ? 'renderPartial' : 'render';
+    return parent::$method($view, $data, $return);
+  }
+
   public function returnTo($default = null)
   {
     $url = $this->getReturnUrl();

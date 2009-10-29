@@ -214,10 +214,10 @@ class CrudModel extends CActiveRecord
       if($form->validate()) {
         $result = $this->save();
         if($result!==false) {
-          throw new FormSuccessException($this);
+          throw new FormSuccessException($form);
         }
       }
-      throw new FormFailException($this);
+      throw new FormFailException($form);
     }
 
     return $form;
