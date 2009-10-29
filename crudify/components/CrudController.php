@@ -324,7 +324,7 @@ abstract class CrudController extends CController
     foreach($columns as $column) {
       if(isset($_GET[$column])) {
         $criteria->mergeWith(array(
-          'condition' => "$relationName.$column = :{$column}",
+          'condition' => "$column = :{$column}",
           'params' => array(":{$column}" => $_GET[$column]),
         ));
       }
