@@ -26,17 +26,32 @@ abstract class CrudController extends CController
       $this->setReturnUrl($_GET['returnUrl']);
       unset($_GET['returnUrl']);
     }
-
-    $cs = Yii::app()->clientScript;
-
-    $cs->registerScriptFile($this->assetPath.'/js/crud.js');
-    $cs->registerCssFile($this->assetPath.'/css/modules/crud.css');
   }
 
   public function render($view, $data = array(), $return = false)
   {
     $method = Yii::app()->request->isAjaxRequest ? 'renderPartial' : 'render';
     return parent::$method($view, $data, $return);
+  }
+
+  public function renderText($text, $return = false)
+  {
+    if(Yii::app()->request->isAjaxRequest) {
+      $text=$this->processOutput($text);
+      if($return)
+        return $text;
+      else
+        echo $text;
+    } else {
+      return parent::renderText($text, $return);
+    }
+  }
+
+  public function renderJSON($id, $replyCode, $replyText = '', $data = null)
+  {
+    header("HTTP/1.X $replyCode $replyText");
+    echo CJSON::encode(compact('id', 'replyCode', 'replyText', 'data'));
+    exit();
   }
 
   public function returnTo($default = null)
